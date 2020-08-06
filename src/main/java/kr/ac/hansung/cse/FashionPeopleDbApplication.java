@@ -11,15 +11,5 @@ public class FashionPeopleDbApplication extends SpringBootServletInitializer {
 	public static void main(String[] args) {
 		SpringApplication.run(FashionPeopleDbApplication.class, args);
 	}
-	/**
-	@Override
-	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-		return builder.sources(FashionPeopleDbApplication.class);
-	}
-	
-	public static void main(String[] args) {
-		SpringApplication app = new SpringApplication(FashionPeopleDbApplication.class);
-		app.run(args);
-	}
-**/
+
 }

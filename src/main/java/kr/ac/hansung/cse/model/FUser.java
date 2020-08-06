@@ -4,8 +4,6 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import lombok.Getter;
@@ -34,11 +32,15 @@ public class FUser implements Serializable {
 
 	@Column(name = "instagram_id")
 	private String instagramId;
+	
+	@Column(name = "profile_image")
+	private String profileImage;
 
-	public FUser(String id, String name, String instagramId) {
+	public FUser(String id, String name, String instagramId, String profileImage) {
 		this.id = id;
 		this.name = name;
 		this.instagramId = instagramId;
+		this.profileImage = profileImage;
 	}
 
 }

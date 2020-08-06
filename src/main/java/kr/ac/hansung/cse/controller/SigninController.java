@@ -14,7 +14,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import kr.ac.hansung.cse.model.FUser;
 import kr.ac.hansung.cse.repo.FUserRepository;
@@ -40,7 +44,7 @@ public class SigninController {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	@GetMapping("/{id}")
 	public ResponseEntity<FUser> getUserById(@PathVariable("id") String id) {
 		Optional<FUser> customerData = repository.findById(id);
@@ -51,7 +55,7 @@ public class SigninController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
 	@DeleteMapping("/{id}")
 	public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") String id) {
 		try {
@@ -61,7 +65,7 @@ public class SigninController {
 			return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
 		}
 	}
-	
+
 	@PutMapping("/{id}")
 	public ResponseEntity<FUser> updateUser(@PathVariable("id") String id, @RequestBody FUser user) {
 		Optional<FUser> userData = repository.findById(id);
@@ -71,6 +75,7 @@ public class SigninController {
 			_user.setId(user.getId());
 			_user.setName(user.getName());
 			_user.setInstagramId(user.getInstagramId());
+			_user.setProfileImage(user.getProfileImage());
 			return new ResponseEntity<>(repository.save(_user), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -80,11 +85,12 @@ public class SigninController {
 	@PostMapping
 	public ResponseEntity<FUser> postUser(@RequestBody FUser user) {
 		try {
-			FUser _user = repository.save(new FUser(user.getId(), user.getName(), user.getInstagramId()));
+			FUser _user = repository.save(new FUser(user.getId(), user.getName(), user.getInstagramId(), user.getProfileImage()));
 			return new ResponseEntity<>(_user, HttpStatus.CREATED);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.EXPECTATION_FAILED);
 		}
 	}
+
 
 }
