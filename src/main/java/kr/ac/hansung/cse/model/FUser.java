@@ -2,14 +2,15 @@ package kr.ac.hansung.cse.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
 import lombok.Getter;
@@ -42,11 +43,17 @@ public class FUser implements Serializable {
 	@Column(name = "profile_image")
 	private String profileImage;
 	
-	@OneToMany(mappedBy="fUser", cascade=CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name="user_id")
 	private List<FeedImage> images = new ArrayList<FeedImage>();
 
-	public void addFeedImage(FeedImage image) {
-		images.add(image);
+	public FeedImage getImage(String imageName) {
+		for(FeedImage image :images) {
+			if(image.getImageName().equals(imageName)) {
+				return image;
+			}
+		}
+		return null;
 	}
 	public FUser(String id, String name, String instagramId, String profileImage) {
 		this.id = id;

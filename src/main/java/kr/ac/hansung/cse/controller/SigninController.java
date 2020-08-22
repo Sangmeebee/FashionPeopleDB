@@ -17,19 +17,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.ac.hansung.cse.model.FUser;
-import kr.ac.hansung.cse.model.FeedImage;
 import kr.ac.hansung.cse.repo.FUserRepository;
-import kr.ac.hansung.cse.repo.FeedImageRepository;
-import kr.ac.hansung.cse.repo.ImageScoreRepository;
 
 @RestController
 @RequestMapping("/users")
 public class SigninController {
-
+	
 	@Autowired
 	FUserRepository fUserrepository;
-	FeedImageRepository feedImageRepository;
-	ImageScoreRepository imageScoreRepository;
 
 	@GetMapping
 	public ResponseEntity<List<FUser>> getAllUsers() {
@@ -78,24 +73,6 @@ public class SigninController {
 			_user.setInstagramId(user.getInstagramId());
 			_user.setProfileImage(user.getProfileImage());
 			return new ResponseEntity<>(fUserrepository.save(_user), HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-	}
-	
-	@PutMapping("/{id}/{imageId}")
-	public ResponseEntity<FUser> updateFeedImage(@PathVariable("id") String id, @PathVariable("imageId") String imageId, @RequestBody FUser user) {
-		Optional<FUser> userData = fUserrepository.findById(id);
-		Optional<FeedImage> image = feedImageRepository.findById(imageId);
-
-		if (userData.isPresent()) {
-			FUser _user = userData.get();
-			if(image.isPresent()) {
-				FeedImage _image = image.get();
-				_user.addFeedImage(_image);
-			}
-			return new ResponseEntity<>(fUserrepository.save(_user), HttpStatus.OK);
-			
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}

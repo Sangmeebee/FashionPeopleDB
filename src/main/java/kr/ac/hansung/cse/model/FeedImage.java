@@ -9,10 +9,13 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,7 +30,6 @@ import lombok.ToString;
 
 public class FeedImage implements Serializable {
 
-
 	/**
 	 * 
 	 */
@@ -36,7 +38,7 @@ public class FeedImage implements Serializable {
 	@Id
 	@GeneratedValue
 	@Column(name = "image_id")
-	private String id;
+	private int id;
 	
 	@Column(name = "image_name")
 	private String imageName;
@@ -44,21 +46,17 @@ public class FeedImage implements Serializable {
 	@Column(name = "timeStamp")
 	private String timeStamp;
 
-	@ManyToOne
-	@JoinColumn(name = "user_id")
-	private FUser fUser;
-
-	@OneToMany(mappedBy="feedImage", cascade=CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<ImageScore> scores = new ArrayList<ImageScore>();
+	@Column(name="user_id")
+	private String userId;
 	
-	public void addImageScore(ImageScore score) {
-		scores.add(score);
-	}
+	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name="image_id")
+	private List<FeedImageLike> likes = new ArrayList<FeedImageLike>();
 	
-	public FeedImage(String imageName, String timeStamp, FUser fUser) {
+	
+	public FeedImage(String imageName, String timeStamp) {
 		this.imageName = imageName;
 		this.timeStamp = timeStamp;
-		this.fUser = fUser;
 	}
 
 
