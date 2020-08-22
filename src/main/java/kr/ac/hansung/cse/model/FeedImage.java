@@ -53,6 +53,9 @@ public class FeedImage implements Serializable {
 	@JoinColumn(name="image_id")
 	private List<FeedImageLike> likes = new ArrayList<FeedImageLike>();
 	
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+	@JoinColumn(name ="user_id")
+	private List<FeedImageComment> comments = new ArrayList<FeedImageComment>();
 	
 	public FeedImage(String imageName, String timeStamp) {
 		this.imageName = imageName;

@@ -40,23 +40,4 @@ public class FeedImageController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
-	@PutMapping("/{id}/{imageName}")
-	public ResponseEntity<FeedImage> updateImageScore(@PathVariable("id") String id, @PathVariable("imageName") String imageName, @RequestBody FeedImageLike like) {
-		List<FeedImage> feedImageData = feedImageRepository.findByImageName(imageName);
-		if (!feedImageData.isEmpty()) {
-			FeedImage image = new FeedImage();
-			FeedImageLike _like = new FeedImageLike(like.getLikePerson());
-			for(FeedImage _image : feedImageData) {
-				if(_image.getUserId().equals(id)) {
-					image = _image;
-					image.getLikes().add(_like);
-				}
-			}
-			return new ResponseEntity<>(feedImageRepository.save(image), HttpStatus.OK);
-			
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-	}
 }
