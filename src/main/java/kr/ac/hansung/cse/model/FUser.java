@@ -45,10 +45,23 @@ public class FUser implements Serializable {
 	
 	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name="user_id")
-	private List<FeedImage> images = new ArrayList<FeedImage>();
+	private List<FeedImage> feedImages = new ArrayList<FeedImage>();
+	
+	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name="user_id")
+	private List<RankImage> rankImages = new ArrayList<RankImage>();
 
-	public FeedImage getImage(String imageName) {
-		for(FeedImage image :images) {
+	public FeedImage getFeedImage(String imageName) {
+		for(FeedImage image : feedImages) {
+			if(image.getImageName().equals(imageName)) {
+				return image;
+			}
+		}
+		return null;
+	}
+	
+	public RankImage getRankImage(String imageName) {
+		for(RankImage image : rankImages) {
 			if(image.getImageName().equals(imageName)) {
 				return image;
 			}

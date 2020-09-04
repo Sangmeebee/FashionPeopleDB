@@ -15,25 +15,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.ac.hansung.cse.model.FUser;
-import kr.ac.hansung.cse.model.FeedImage;
+import kr.ac.hansung.cse.model.RankImage;
 import kr.ac.hansung.cse.repo.FUserRepository;
-import kr.ac.hansung.cse.repo.FeedImageRepository;
+import kr.ac.hansung.cse.repo.RankImageRepository;
 
 @RestController
-@RequestMapping("/feedImage")
-public class FeedImageController {
+@RequestMapping("/rankImage")
+public class RankImageController {
+
 	@Autowired
 	FUserRepository fUserrepository;
+	
 	@Autowired
-	FeedImageRepository feedImageRepository;
-
+	RankImageRepository rankImageRepository;
+	
 	@GetMapping("/{id}")
-	public ResponseEntity<List<FeedImage>> getAllImages(@PathVariable("id") String id) {
-		List<FeedImage> images = new ArrayList<>();
+	public ResponseEntity<List<RankImage>> getAllImages(@PathVariable("id") String id) {
+		List<RankImage> images = new ArrayList<>();
 		try {
-			feedImageRepository.findAll().forEach(images::add);
-			List<FeedImage> _images = new ArrayList<FeedImage>();
-			for(FeedImage image : images) {
+			rankImageRepository.findAll().forEach(images::add);
+			List<RankImage> _images = new ArrayList<RankImage>();
+			for(RankImage image : images) {
 				if(image.getUserId().equals(id)) {
 					_images.add(image);
 				}
@@ -47,20 +49,20 @@ public class FeedImageController {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<FUser> updateFeedImage(@PathVariable("id") String id, @RequestBody FeedImage image) {
+	public ResponseEntity<FUser> updateFeedImage(@PathVariable("id") String id, @RequestBody RankImage image) {
 		Optional<FUser> userData = fUserrepository.findById(id);
 		
 		if (userData.isPresent()) {
 			FUser _user = userData.get();
-			FeedImage _image = new FeedImage(image.getImageName(), image.getTimeStamp());
-			_user.getFeedImages().add(_image);
+			_user.getRankImages().add(image);
 			return new ResponseEntity<>(fUserrepository.save(_user), HttpStatus.OK);
 			
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	
 }

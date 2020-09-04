@@ -9,31 +9,28 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+
 @Entity
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
-public class FeedImage implements Serializable {
+public class RankImage implements Serializable {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 4225217987814035781L;
-
+	private static final long serialVersionUID = -5306071520320797858L;
+	
 	@Id
 	@GeneratedValue
 	@Column(name = "image_id")
@@ -42,25 +39,25 @@ public class FeedImage implements Serializable {
 	@Column(name = "image_name")
 	private String imageName;
 	
-	@Column(name = "timeStamp")
+	@Column(name = "time_stamp")
 	private String timeStamp;
-
+	
+	@Column(name = "competition_date")
+	private String competitionDate;
+	
 	@Column(name="user_id")
 	private String userId;
 	
 	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name="image_id")
-	private List<FeedImageLike> likes = new ArrayList<FeedImageLike>();
+	private List<RankImageLike> likes = new ArrayList<RankImageLike>();
+
 	
-	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
-	@JoinColumn(name ="user_id")
-	private List<FeedImageComment> comments = new ArrayList<FeedImageComment>();
-	
-	public FeedImage(String imageName, String timeStamp) {
+	public RankImage(String imageName, String timeStamp, String competitionDate) {
 		this.imageName = imageName;
 		this.timeStamp = timeStamp;
+		this.competitionDate = competitionDate;
 	}
 
-
-
+	
 }
