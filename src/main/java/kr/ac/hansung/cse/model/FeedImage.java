@@ -44,21 +44,43 @@ public class FeedImage implements Serializable {
 	
 	@Column(name = "timeStamp")
 	private String timeStamp;
-
+	
 	@Column(name="user_id")
 	private String userId;
+
+	@Column(name="style")
+	private String style;
+	
+	@Column(name="top")
+	private String top;
+	
+	@Column(name="pants")
+	private String pants;
+	
+	@Column(name="shoes")
+	private String shoes;
+	
+	@Column(name="battle_now")
+	private boolean battleNow;
 	
 	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name="image_id")
 	private List<FeedImageLike> likes = new ArrayList<FeedImageLike>();
 	
+	/**
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	@JoinColumn(name ="user_id")
 	private List<FeedImageComment> comments = new ArrayList<FeedImageComment>();
+	**/
 	
-	public FeedImage(String imageName, String timeStamp) {
+	public FeedImage(String imageName, String timeStamp, String style, String top, String pants, String shoes, boolean battleNow) {
 		this.imageName = imageName;
 		this.timeStamp = timeStamp;
+		this.style = style;
+		this.top = top;
+		this.pants = pants;
+		this.shoes = shoes;
+		this.battleNow = battleNow;
 	}
 
 

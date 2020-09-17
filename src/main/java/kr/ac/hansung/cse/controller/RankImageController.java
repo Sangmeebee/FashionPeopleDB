@@ -50,6 +50,7 @@ public class RankImageController {
 		}
 	}
 	
+	/**
 	@PutMapping("/{id}")
 	public ResponseEntity<FUser> updateFeedImage(@PathVariable("id") String id, @RequestBody RankImage image) {
 		Optional<FUser> userData = fUserrepository.findById(id);
@@ -63,6 +64,6 @@ public class RankImageController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
+	**/
 	
 }

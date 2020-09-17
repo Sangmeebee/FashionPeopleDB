@@ -59,7 +59,7 @@ public class FeedImageCommentController {
 			return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
 		}
 	}
-	
+	/**
 	@PutMapping("/{id}/{imageName}")
 	public ResponseEntity<FeedImage> updateFeedImageComment(@PathVariable("id") String id, @PathVariable("imageName") String imageName, @RequestBody FeedImageComment comment) {
 		List<FeedImage> feedImageData = feedImageRepository.findByImageName(imageName);
@@ -79,7 +79,7 @@ public class FeedImageCommentController {
 		}
 	}
 	
-	
+	**/
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<HttpStatus> deleteFeedImageComment(@PathVariable("id") int id) {

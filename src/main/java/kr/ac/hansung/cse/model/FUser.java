@@ -47,9 +47,11 @@ public class FUser implements Serializable {
 	@JoinColumn(name="user_id")
 	private List<FeedImage> feedImages = new ArrayList<FeedImage>();
 	
+	/**
 	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name="user_id")
 	private List<RankImage> rankImages = new ArrayList<RankImage>();
+	**/
 
 	public FeedImage getFeedImage(String imageName) {
 		for(FeedImage image : feedImages) {
@@ -60,6 +62,7 @@ public class FUser implements Serializable {
 		return null;
 	}
 	
+	/**
 	public RankImage getRankImage(String imageName) {
 		for(RankImage image : rankImages) {
 			if(image.getImageName().equals(imageName)) {
@@ -68,6 +71,7 @@ public class FUser implements Serializable {
 		}
 		return null;
 	}
+	**/
 	public FUser(String id, String name, String instagramId, String profileImage) {
 		this.id = id;
 		this.name = name;
