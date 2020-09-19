@@ -9,4 +9,5 @@ import kr.ac.hansung.cse.model.FeedImage;
 
 public interface FeedImageRepository extends CrudRepository<FeedImage, Integer> {
 	List<FeedImage> findByImageName(String imageName);
+	void deleteByImageName(String imageName);
 }
