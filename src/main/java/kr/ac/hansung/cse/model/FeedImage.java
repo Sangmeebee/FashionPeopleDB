@@ -27,7 +27,6 @@ import lombok.ToString;
 @Setter
 @ToString
 @NoArgsConstructor
-
 public class FeedImage implements Serializable {
 
 	/**
@@ -45,21 +44,42 @@ public class FeedImage implements Serializable {
 	
 	@Column(name = "timeStamp")
 	private String timeStamp;
-
+	
 	@Column(name="user_id")
 	private String userId;
+
+	@Column(name="style")
+	private String style;
+	
+	@Column(name="top")
+	private String top;
+	
+	@Column(name="pants")
+	private String pants;
+	
+	@Column(name="shoes")
+	private String shoes;
+	
+	@Column(name="rank")
+	private int rank;
+	
+	@Column(name="battle_now")
+	private boolean battleNow;
 	
 	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name="image_id")
 	private List<FeedImageLike> likes = new ArrayList<FeedImageLike>();
 	
-	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
-	@JoinColumn(name ="user_id")
-	private List<FeedImageComment> comments = new ArrayList<FeedImageComment>();
 	
-	public FeedImage(String imageName, String timeStamp) {
+	public FeedImage(String imageName, String timeStamp, String style, String top, String pants, String shoes, int rank, boolean battleNow) {
 		this.imageName = imageName;
 		this.timeStamp = timeStamp;
+		this.style = style;
+		this.top = top;
+		this.pants = pants;
+		this.shoes = shoes;
+		this.rank = rank;
+		this.battleNow = battleNow;
 	}
 
 
