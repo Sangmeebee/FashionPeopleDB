@@ -60,6 +60,9 @@ public class FeedImage implements Serializable {
 	@Column(name="shoes")
 	private String shoes;
 	
+	@Column(name="rank")
+	private int rank;
+	
 	@Column(name="battle_now")
 	private boolean battleNow;
 	
@@ -73,13 +76,14 @@ public class FeedImage implements Serializable {
 	private List<FeedImageComment> comments = new ArrayList<FeedImageComment>();
 	**/
 	
-	public FeedImage(String imageName, String timeStamp, String style, String top, String pants, String shoes, boolean battleNow) {
+	public FeedImage(String imageName, String timeStamp, String style, String top, String pants, String shoes, int rank, boolean battleNow) {
 		this.imageName = imageName;
 		this.timeStamp = timeStamp;
 		this.style = style;
 		this.top = top;
 		this.pants = pants;
 		this.shoes = shoes;
+		this.rank = rank;
 		this.battleNow = battleNow;
 	}
 

@@ -55,7 +55,7 @@ public class FeedImageController {
 		
 		if (userData.isPresent()) {
 			FUser _user = userData.get();
-			FeedImage _image = new FeedImage(image.getImageName(), image.getTimeStamp(), image.getStyle(), image.getTop(), image.getPants(), image.getShoes(), image.isBattleNow());
+			FeedImage _image = new FeedImage(image.getImageName(), image.getTimeStamp(), image.getStyle(), image.getTop(), image.getPants(), image.getShoes(), image.getRank(), image.isBattleNow());
 			_user.getFeedImages().add(_image);
 			return new ResponseEntity<>(fUserrepository.save(_user), HttpStatus.OK);
 			
