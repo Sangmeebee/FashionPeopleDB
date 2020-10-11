@@ -34,7 +34,10 @@ public class FeedImageLike implements Serializable{
 	private String likePerson;
 	
 	@Column(name="image_id")
-	private String imageId;
+	private int imageId;
+	
+	@Column(name="rating")
+	private float rating;
 
 	public FeedImageLike(String likePerson) {
 		this.likePerson = likePerson;
