@@ -28,8 +28,24 @@ public class FeedImageController {
 	@Autowired
 	FeedImageRepository feedImageRepository;
 
+	@GetMapping("/")
+	public ResponseEntity<List<FeedImage>> getAllImages() {
+		List<FeedImage> images = new ArrayList<>();
+		try {
+			feedImageRepository.findAll().forEach(images::add);
+
+			if (images.isEmpty()) {
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			}
+			return new ResponseEntity<>(images, HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	
 	@GetMapping("/{id}")
-	public ResponseEntity<List<FeedImage>> getAllImages(@PathVariable("id") String id) {
+	public ResponseEntity<List<FeedImage>> getAllPersonImages(@PathVariable("id") String id) {
 		List<FeedImage> images = new ArrayList<>();
 		try {
 			feedImageRepository.findAll().forEach(images::add);
