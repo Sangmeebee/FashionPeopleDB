@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -43,18 +45,10 @@ public class FUser implements Serializable {
 	@Column(name = "profile_image")
 	private String profileImage;
 	
-	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name="user_id")
-	private List<FeedImage> images = new ArrayList<FeedImage>();
+	@OneToMany(mappedBy="user")
+	@JsonManagedReference
+	private List<FeedImage> images = new ArrayList<>();
 
-	public FeedImage getImage(String imageName) {
-		for(FeedImage image :images) {
-			if(image.getImageName().equals(imageName)) {
-				return image;
-			}
-		}
-		return null;
-	}
 	public FUser(String id, String name, String instagramId, String profileImage) {
 		this.id = id;
 		this.name = name;

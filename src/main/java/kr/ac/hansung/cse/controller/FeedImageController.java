@@ -51,7 +51,7 @@ public class FeedImageController {
 			feedImageRepository.findAll().forEach(images::add);
 			List<FeedImage> _images = new ArrayList<FeedImage>();
 			for(FeedImage image : images) {
-				if(image.getUserId().equals(id)) {
+				if(image.getUser().getId().equals(id)) {
 					_images.add(image);
 				}
 			}

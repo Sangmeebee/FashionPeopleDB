@@ -33,7 +33,7 @@ public class FeedImageLikeController {
 			FeedImage image = new FeedImage();
 			FeedImageLike _like = new FeedImageLike(like.getLikePerson());
 			for(FeedImage _image : feedImageData) {
-				if(_image.getUserId().equals(id)) {
+				if(_image.getUser().getId().equals(id)) {
 					image = _image;
 					image.getLikes().add(_like);
 				}

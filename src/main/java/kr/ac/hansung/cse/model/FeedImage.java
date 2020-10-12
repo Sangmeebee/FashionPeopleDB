@@ -15,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
@@ -44,9 +45,11 @@ public class FeedImage implements Serializable {
 	
 	@Column(name = "timeStamp")
 	private String timeStamp;
-	
-	@Column(name="user_id")
-	private String userId;
+
+	@ManyToOne
+	@JoinColumn(name="user_id")
+	@JsonBackReference
+	private FUser user;
 
 	@Column(name="style")
 	private String style;
