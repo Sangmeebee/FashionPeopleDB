@@ -13,6 +13,9 @@ spring:
   jpa:
     properties:
       hibernate:
+        naming:
+          implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+          physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy 
         show_sql: true
         format_sql: true
         temp:

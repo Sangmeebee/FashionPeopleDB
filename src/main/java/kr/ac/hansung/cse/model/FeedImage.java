@@ -30,61 +30,60 @@ import lombok.ToString;
 @NoArgsConstructor
 public class FeedImage implements Serializable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 4225217987814035781L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 4225217987814035781L;
 
-	@Id
-	@GeneratedValue
-	@Column(name = "image_id")
-	private int id;
-	
-	@Column(name = "image_name")
-	private String imageName;
-	
-	@Column(name = "timeStamp")
-	private String timeStamp;
+    @Id
+    @GeneratedValue
+    @Column(name = "image_id")
+    private int id;
 
-	@ManyToOne
-	@JoinColumn(name="user_id")
-	@JsonBackReference
-	private FUser user;
+    @Column(name = "image_name")
+    private String imageName;
 
-	@Column(name="style")
-	private String style;
-	
-	@Column(name="top")
-	private String top;
-	
-	@Column(name="pants")
-	private String pants;
-	
-	@Column(name="shoes")
-	private String shoes;
-	
-	@Column(name="rank")
-	private int rank;
-	
-	@Column(name="battle_now")
-	private boolean battleNow;
-	
-	@OneToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name="image_id")
-	private List<FeedImageLike> likes = new ArrayList<FeedImageLike>();
-	
-	
-	public FeedImage(String imageName, String timeStamp, String style, String top, String pants, String shoes, int rank, boolean battleNow) {
-		this.imageName = imageName;
-		this.timeStamp = timeStamp;
-		this.style = style;
-		this.top = top;
-		this.pants = pants;
-		this.shoes = shoes;
-		this.rank = rank;
-		this.battleNow = battleNow;
-	}
+    @Column(name = "timeStamp")
+    private String timeStamp;
 
+    @Column(name = "style")
+    private String style;
+
+    @Column(name = "top")
+    private String top;
+
+    @Column(name = "pants")
+    private String pants;
+
+    @Column(name = "shoes")
+    private String shoes;
+
+    @Column(name = "rank")
+    private int rank;
+
+    @Column(name = "battle_now")
+    private boolean battleNow;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "image_id")
+    private List<FeedImageLike> likes = new ArrayList<FeedImageLike>();
+    
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private FUser user;
+    
+
+
+    public FeedImage(String imageName, String timeStamp, String style, String top, String pants, String shoes, int rank, boolean battleNow) {
+        this.imageName = imageName;
+        this.timeStamp = timeStamp;
+        this.style = style;
+        this.top = top;
+        this.pants = pants;
+        this.shoes = shoes;
+        this.rank = rank;
+        this.battleNow = battleNow;
+    }
 
 
 }

@@ -23,80 +23,80 @@ import kr.ac.hansung.cse.repo.FeedImageRepository;
 @RestController
 @RequestMapping("/feedImage")
 public class FeedImageController {
-	@Autowired
-	FUserRepository fUserrepository;
-	@Autowired
-	FeedImageRepository feedImageRepository;
+    @Autowired
+    FUserRepository fUserrepository;
+    @Autowired
+    FeedImageRepository feedImageRepository;
 
-	@GetMapping("/")
-	public ResponseEntity<List<FeedImage>> getAllImages() {
-		List<FeedImage> images = new ArrayList<>();
-		try {
-			feedImageRepository.findAll().forEach(images::add);
+    @GetMapping("/")
+    public ResponseEntity<List<FeedImage>> getAllImages() {
+        List<FeedImage> images = new ArrayList<>();
+        try {
+            feedImageRepository.findAll().forEach(images::add);
 
-			if (images.isEmpty()) {
-				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-			}
-			return new ResponseEntity<>(images, HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
+            if (images.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(images, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
-	
-	@GetMapping("/{id}")
-	public ResponseEntity<List<FeedImage>> getAllPersonImages(@PathVariable("id") String id) {
-		List<FeedImage> images = new ArrayList<>();
-		try {
-			feedImageRepository.findAll().forEach(images::add);
-			List<FeedImage> _images = new ArrayList<FeedImage>();
-			for(FeedImage image : images) {
-				if(image.getUser().getId().equals(id)) {
-					_images.add(image);
-				}
-			}
 
-			if (_images.isEmpty()) {
-				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-			}
-			return new ResponseEntity<>(_images, HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
+    @GetMapping("/{id}")
+    public ResponseEntity<List<FeedImage>> getAllPersonImages(@PathVariable("id") String id) {
+        List<FeedImage> images = new ArrayList<>();
+        try {
+            feedImageRepository.findAll().forEach(images::add);
+            List<FeedImage> _images = new ArrayList<FeedImage>();
+            for (FeedImage image : images) {
+                if (image.getUser().getId().equals(id)) {
+                    _images.add(image);
+                }
+            }
 
-	
-	@PutMapping("/{id}")
-	public ResponseEntity<FUser> updateFeedImage(@PathVariable("id") String id, @RequestBody FeedImage image) {
-		Optional<FUser> userData = fUserrepository.findById(id);
-		
-		if (userData.isPresent()) {
-			FUser _user = userData.get();
-			List<FeedImage> images = _user.getImages();
-			boolean isChange = false;
-			for(FeedImage _image : images) {
-				if(_image.getImageName().equals(image.getImageName())) {
-					_image.setImageName(image.getImageName());
-					_image.setTimeStamp(image.getTimeStamp());
-					_image.setStyle(image.getStyle());
-					_image.setTop(image.getTop());
-					_image.setPants(image.getPants());
-					_image.setShoes(image.getShoes());
-					_image.setRank(image.getRank());
-					_image.setBattleNow(image.isBattleNow());
-					feedImageRepository.save(_image);
-					isChange = true;
-				}
-			}
-			if(!isChange) {
-				FeedImage mImage = new FeedImage(image.getImageName(), image.getTimeStamp(), image.getStyle(), image.getTop(), image.getPants(), image.getShoes(), image.getRank(), image.isBattleNow());
-				_user.getImages().add(mImage);
-			}
-			
-			return new ResponseEntity<>(fUserrepository.save(_user), HttpStatus.OK);
-			
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-	}
+            if (_images.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(_images, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<FUser> updateFeedImage(@PathVariable("id") String id, @RequestBody FeedImage image) {
+        Optional<FUser> userData = fUserrepository.findById(id);
+
+        if (userData.isPresent()) {
+            FUser _user = userData.get();
+            List<FeedImage> images = _user.getImages();
+            boolean isChange = false;
+            for (FeedImage _image : images) {
+                if (_image.getImageName().equals(image.getImageName())) {
+                    _image.setImageName(image.getImageName());
+                    _image.setTimeStamp(image.getTimeStamp());
+                    _image.setStyle(image.getStyle());
+                    _image.setTop(image.getTop());
+                    _image.setPants(image.getPants());
+                    _image.setShoes(image.getShoes());
+                    _image.setRank(image.getRank());
+                    _image.setBattleNow(image.isBattleNow());
+                    feedImageRepository.save(_image);
+                    isChange = true;
+                }
+            }
+            if (!isChange) {
+                FeedImage mImage = new FeedImage(image.getImageName(), image.getTimeStamp(), image.getStyle(), image.getTop(), image.getPants(), image.getShoes(), image.getRank(), image.isBattleNow());
+                _user.getImages().add(mImage);
+            }
+
+            return new ResponseEntity<>(fUserrepository.save(_user), HttpStatus.OK);
+
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }

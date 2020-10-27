@@ -12,7 +12,9 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.Getter;
@@ -27,33 +29,33 @@ import lombok.ToString;
 @NoArgsConstructor
 public class FUser implements Serializable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7416085012069871833L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = -7416085012069871833L;
 
-	@Id
-	@Column(name = "user_id")
-	private String id;
-	
-	@Column(name = "name")
-	private String name;
+    @Id
+    @Column(name= "id")
+    private String id;
 
-	@Column(name = "instagram_id")
-	private String instagramId;
-	
-	@Column(name = "profile_image")
-	private String profileImage;
-	
-	@OneToMany(mappedBy="user")
-	@JsonManagedReference
-	private List<FeedImage> images = new ArrayList<>();
+    @Column(name = "name")
+    private String name;
 
-	public FUser(String id, String name, String instagramId, String profileImage) {
-		this.id = id;
-		this.name = name;
-		this.instagramId = instagramId;
-		this.profileImage = profileImage;
-	}
+    @Column(name = "instagram_id")
+    private String instagramId;
+
+    @Column(name = "profile_image")
+    private String profileImage;
+
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private List<FeedImage> images = new ArrayList<>();
+
+    public FUser(String id, String name, String instagramId, String profileImage) {
+        this.id = id;
+        this.name = name;
+        this.instagramId = instagramId;
+        this.profileImage = profileImage;
+    }
 
 }
