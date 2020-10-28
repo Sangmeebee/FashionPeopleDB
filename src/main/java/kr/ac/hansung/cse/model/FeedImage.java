@@ -16,7 +16,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -68,6 +71,8 @@ public class FeedImage implements Serializable {
     @JoinColumn(name = "image_id")
     private List<FeedImageLike> likes = new ArrayList<FeedImageLike>();
     
+    
+    @JsonIgnoreProperties({"images"})
     @ManyToOne
     @JoinColumn(name = "user_id")
     private FUser user;
@@ -85,5 +90,16 @@ public class FeedImage implements Serializable {
         this.battleNow = battleNow;
     }
 
+    public FeedImage(String imageName, String timeStamp, String style, String top, String pants, String shoes, int rank, boolean battleNow, FUser user) {
+        this.imageName = imageName;
+        this.timeStamp = timeStamp;
+        this.style = style;
+        this.top = top;
+        this.pants = pants;
+        this.shoes = shoes;
+        this.rank = rank;
+        this.battleNow = battleNow;
+        this.user = user;
+    }
 
 }
