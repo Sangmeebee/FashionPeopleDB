@@ -43,28 +43,19 @@ public class FeedImageController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    
 
-
-    @GetMapping("/{id}")
-    public ResponseEntity<List<FeedImage>> getAllPersonImages(@PathVariable("id") String id) {
-        List<FeedImage> images = new ArrayList<>();
-        try {
-            feedImageRepository.findAll().forEach(images::add);
-            List<FeedImage> _images = new ArrayList<FeedImage>();
-            for (FeedImage image : images) {
-                if (image.getUser().getId().equals(id)) {
-                    _images.add(image);
-                }
-            }
-
-            if (_images.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            }
-            return new ResponseEntity<>(_images, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+	@GetMapping("/{id}")
+	public ResponseEntity<List<FeedImage>> getUserImages(@PathVariable("id") String id) {
+		Optional<FUser> userData = fUserrepository.findById(id);
+		FUser user = userData.get();
+		List<FeedImage> images = user.getImages();
+		if (images.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-    }
+        return new ResponseEntity<>(images, HttpStatus.OK);
+	}
+
 
     @PostMapping("/{id}")
     public ResponseEntity<FeedImage> saveFeedImage(@PathVariable("id") String id, @RequestBody FeedImage image) {
