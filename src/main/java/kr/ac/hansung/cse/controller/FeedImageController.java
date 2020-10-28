@@ -29,7 +29,7 @@ public class FeedImageController {
     @Autowired
     FeedImageRepository feedImageRepository;
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<FeedImage>> getAllImages() {
         List<FeedImage> images = new ArrayList<>();
         try {
