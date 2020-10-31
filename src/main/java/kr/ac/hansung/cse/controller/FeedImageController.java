@@ -55,6 +55,23 @@ public class FeedImageController {
         }
         return new ResponseEntity<>(images, HttpStatus.OK);
 	}
+	
+	@GetMapping("/other/{id}")
+	public ResponseEntity<List<FeedImage>> getOtherImages(@PathVariable("id") String id) {
+		List<FeedImage> images = new ArrayList<>();
+        try {
+            feedImageRepository.findAll().forEach(images::add);
+            List<FeedImage> _images = new ArrayList<>();
+            for(FeedImage image : images) {
+            	if(image.getEvaluations().size() <= 10 && !image.getUser().getId().equals(id)) {
+            		_images.add(image);
+            	}
+            }
+            return new ResponseEntity<>(_images, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+	}
 
 
     @PostMapping("/{id}")
