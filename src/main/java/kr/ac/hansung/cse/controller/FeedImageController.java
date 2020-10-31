@@ -63,7 +63,16 @@ public class FeedImageController {
             feedImageRepository.findAll().forEach(images::add);
             List<FeedImage> _images = new ArrayList<>();
             for(FeedImage image : images) {
-            	if(image.getEvaluations().size() <= 10 && !image.getUser().getId().equals(id)) {
+            	boolean isAlreadyEvaluation = false;
+            	List<FeedImageEvaluation> evaluations = image.getEvaluations();
+            	if(!evaluations.isEmpty()) {
+            		for(FeedImageEvaluation evaluation : image.getEvaluations()) {
+                		if(evaluation.getEvaluationPersonId().equals(id)) {
+                			isAlreadyEvaluation = true;
+                		}
+                	}
+            	}
+            	if(image.getEvaluations().size() < 10 && !image.getUser().getId().equals(id) && !isAlreadyEvaluation) {
             		_images.add(image);
             	}
             }

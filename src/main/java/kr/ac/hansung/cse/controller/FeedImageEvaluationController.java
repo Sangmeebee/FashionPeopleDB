@@ -22,15 +22,14 @@ import kr.ac.hansung.cse.repo.FeedImageRepository;
 @RestController
 @RequestMapping("/feedImage/evaluation")
 public class FeedImageEvaluationController {
-	@Autowired
-	FUserRepository fUserrepository;
+
 	@Autowired
 	FeedImageRepository feedImageRepository;
 	
-	@PutMapping("/{imageId}")
-	public ResponseEntity<FeedImage> updateImageScore(@PathVariable("imageId") int imageId, @RequestBody FeedImageEvaluation evaluation) {
-		Optional<FeedImage> feedImageData = feedImageRepository.findById(imageId);
-		if (!feedImageData.isPresent()) {
+	@PutMapping("/{imageName}")
+	public ResponseEntity<FeedImage> updateImageScore(@PathVariable("imageName") String imageName, @RequestBody FeedImageEvaluation evaluation) {
+		Optional<FeedImage> feedImageData = feedImageRepository.findByImageName(imageName);
+		if (feedImageData.isPresent()) {
 			FeedImage image = feedImageData.get();
 			FeedImageEvaluation _evaluation = new FeedImageEvaluation(evaluation.getEvaluationPersonId(), evaluation.getScore());
 			List<FeedImageEvaluation> evaluations = image.getEvaluations();
@@ -43,4 +42,5 @@ public class FeedImageEvaluationController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
+
 }
