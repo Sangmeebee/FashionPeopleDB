@@ -28,7 +28,7 @@ public class FeedImageEvaluationController {
 	
 	@PutMapping("/{imageName}")
 	public ResponseEntity<FeedImage> updateImageScore(@PathVariable("imageName") String imageName, @RequestBody FeedImageEvaluation evaluation) {
-		Optional<FeedImage> feedImageData = feedImageRepository.findByImageName(imageName);
+		Optional<FeedImage> feedImageData = feedImageRepository.findById(imageName);
 		if (feedImageData.isPresent()) {
 			FeedImage image = feedImageData.get();
 			FeedImageEvaluation _evaluation = new FeedImageEvaluation(evaluation.getEvaluationPersonId(), evaluation.getScore());
