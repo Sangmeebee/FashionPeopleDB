@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import kr.ac.hansung.cse.model.FUser;
 import kr.ac.hansung.cse.model.FeedImage;
-import kr.ac.hansung.cse.model.FeedImageLike;
+import kr.ac.hansung.cse.model.FeedImageEvaluation;
 import kr.ac.hansung.cse.repo.FUserRepository;
 import kr.ac.hansung.cse.repo.FeedImageRepository;
 

@@ -40,7 +40,7 @@ public class FeedImage implements Serializable {
 
     @Id
     @GeneratedValue
-    @Column(name = "image_id")
+    @Column(name = "id")
     private int id;
 
     @Column(name = "image_name")
@@ -69,7 +69,7 @@ public class FeedImage implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "image_id")
-    private List<FeedImageLike> likes = new ArrayList<FeedImageLike>();
+    private List<FeedImageEvaluation> evaluations = new ArrayList<FeedImageEvaluation>();
     
     
     @JsonIgnoreProperties({"images"})

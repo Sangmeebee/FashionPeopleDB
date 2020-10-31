@@ -18,7 +18,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @NoArgsConstructor
-public class FeedImageLike implements Serializable{
+public class FeedImageEvaluation implements Serializable{
 
 	/**
 	 * 
@@ -27,20 +27,21 @@ public class FeedImageLike implements Serializable{
 
 	@Id
 	@GeneratedValue
-	@Column(name = "like_id")
+	@Column(name = "id")
 	private int id;
 	
-	@Column(name = "like_person")	
-	private String likePerson;
+	@Column(name = "user_id")	
+	private String userId;
 	
 	@Column(name="image_id")
 	private int imageId;
 	
-	@Column(name="rating")
-	private float rating;
+	@Column(name="score")
+	private float score;
 
-	public FeedImageLike(String likePerson) {
-		this.likePerson = likePerson;
+	public FeedImageEvaluation(String userId, float score) {
+		this.userId = userId;
+		this.score = score;
 	}
 	
 }
