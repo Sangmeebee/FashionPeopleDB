@@ -30,7 +30,7 @@ public class FeedImageEvaluationController {
 	@PutMapping("/{imageId}")
 	public ResponseEntity<FeedImage> updateImageScore(@PathVariable("imageId") int imageId, @RequestBody FeedImageEvaluation evaluation) {
 		Optional<FeedImage> feedImageData = feedImageRepository.findById(imageId);
-		if (!feedImageData.isEmpty()) {
+		if (!feedImageData.isPresent()) {
 			FeedImage image = feedImageData.get();
 			FeedImageEvaluation _evaluation = new FeedImageEvaluation(evaluation.getEvaluationPersonId(), evaluation.getScore());
 			List<FeedImageEvaluation> evaluations = image.getEvaluations();
@@ -47,7 +47,7 @@ public class FeedImageEvaluationController {
 	@PostMapping("/{imageId}")
 	public ResponseEntity<FeedImage> saveImageScore(@PathVariable("imageId") int imageId, @RequestBody FeedImageEvaluation evaluation) {
 		Optional<FeedImage> feedImageData = feedImageRepository.findById(imageId);
-		if (!feedImageData.isEmpty()) {
+		if (!feedImageData.isPresent()) {
 			FeedImage image = feedImageData.get();
 			FeedImageEvaluation _evaluation = new FeedImageEvaluation(evaluation.getEvaluationPersonId(), evaluation.getScore());
 			List<FeedImageEvaluation> evaluations = image.getEvaluations();
