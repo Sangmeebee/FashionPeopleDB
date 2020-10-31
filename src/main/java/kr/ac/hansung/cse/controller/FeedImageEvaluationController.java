@@ -49,7 +49,6 @@ public class FeedImageEvaluationController {
 		Optional<FeedImage> feedImageData = feedImageRepository.findById(imageId);
 		if (!feedImageData.isEmpty()) {
 			FeedImage image = feedImageData.get();
-			System.out.println(image.toString());
 			FeedImageEvaluation _evaluation = new FeedImageEvaluation(evaluation.getEvaluationPersonId(), evaluation.getScore());
 			List<FeedImageEvaluation> evaluations = image.getEvaluations();
 			evaluations.add(_evaluation);

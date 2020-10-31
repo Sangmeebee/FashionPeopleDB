@@ -33,9 +33,6 @@ public class FeedImageEvaluation implements Serializable{
 	@Column(name = "evaluation_person_id")	
 	private String evaluationPersonId;
 	
-	@Column(name="image_id")
-	private int imageId;
-	
 	@Column(name="score")
 	private float score;
 
