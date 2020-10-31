@@ -30,8 +30,8 @@ public class FeedImageEvaluation implements Serializable{
 	@Column(name = "id")
 	private int id;
 	
-	@Column(name = "user_id")	
-	private String userId;
+	@Column(name = "evaluation_person_id")	
+	private String evaluationPersonId;
 	
 	@Column(name="image_id")
 	private int imageId;
@@ -39,8 +39,8 @@ public class FeedImageEvaluation implements Serializable{
 	@Column(name="score")
 	private float score;
 
-	public FeedImageEvaluation(String userId, float score) {
-		this.userId = userId;
+	public FeedImageEvaluation(String evaluationPersonId, float score) {
+		this.evaluationPersonId = evaluationPersonId;
 		this.score = score;
 	}
 	
