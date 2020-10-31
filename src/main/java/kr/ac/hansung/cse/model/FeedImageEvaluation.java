@@ -20,10 +20,11 @@ import lombok.ToString;
 @NoArgsConstructor
 public class FeedImageEvaluation implements Serializable{
 
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 9219899251905499498L;
+	private static final long serialVersionUID = -8926614496461558623L;
 
 	@Id
 	@GeneratedValue
