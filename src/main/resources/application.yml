@@ -6,9 +6,9 @@ server:
 spring:
   data:
     maria:
-      jdbc-url: jdbc:mariadb://fashiondb.cvjw88fdczvx.ap-northeast-2.rds.amazonaws.com:3306/fashiondb?useUnicode=yes&characterEncoding=UTF-8
+      jdbc-url: jdbc:mariadb://database-fashionpeople.cdaqp7hspcqm.ap-northeast-2.rds.amazonaws.com:3306/fashiondb?useUnicode=yes&characterEncoding=UTF-8
       driver-class-name: org.mariadb.jdbc.Driver
-      username: root
+      username: admin
       password: smsw0306
   jpa:
     properties:
