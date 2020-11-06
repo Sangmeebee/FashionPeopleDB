@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -57,8 +56,8 @@ public class FeedImageController {
 	}
 	
 	@GetMapping("/imageName/{imageName}")
-	public ResponseEntity<FeedImage> getFeedImageByName(@PathVariable("imageName") String feedImageName) {
-		Optional<FeedImage> feedImageData = feedImageRepository.findByImageName(feedImageName);
+	public ResponseEntity<FeedImage> getFeedImageByName(@PathVariable("imageName") String imageName) {
+		Optional<FeedImage> feedImageData = feedImageRepository.findById(imageName);
 		if(feedImageData.isPresent()) {
 			FeedImage feedImage = feedImageData.get();
 	        return new ResponseEntity<>(feedImage, HttpStatus.OK);
