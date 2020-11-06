@@ -56,6 +56,18 @@ public class FeedImageController {
         return new ResponseEntity<>(images, HttpStatus.OK);
 	}
 	
+	@GetMapping("/imageName/{imageName}")
+	public ResponseEntity<FeedImage> getFeedImageByName(@PathVariable("imageName") String feedImageName) {
+		Optional<FeedImage> feedImageData = feedImageRepository.findByImageName(feedImageName);
+		if(feedImageData.isPresent()) {
+			FeedImage feedImage = feedImageData.get();
+	        return new ResponseEntity<>(feedImage, HttpStatus.OK);
+		} else {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+
+	}
+	
 	@GetMapping("/other/{id}")
 	public ResponseEntity<List<FeedImage>> getOtherImages(@PathVariable("id") String id) {
 		List<FeedImage> images = new ArrayList<>();
