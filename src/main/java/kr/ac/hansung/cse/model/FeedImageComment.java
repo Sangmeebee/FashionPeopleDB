@@ -47,8 +47,8 @@ public class FeedImageComment implements Serializable {
 	@Column(name = "comment_person_id")	
 	private String commentPersonId;
 	
-	@Column(name="comment")
-	private String comment;
+	@Column(name="content")
+	private String content;
 	
 	@Column(name = "current_date_time")
 	@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
@@ -57,9 +57,9 @@ public class FeedImageComment implements Serializable {
 	@Column(name="image_id")
 	private String imageId;
 
-	public FeedImageComment(String commentPersonId, String comment, LocalDateTime currentDateTime) {
+	public FeedImageComment(String commentPersonId, String content, LocalDateTime currentDateTime) {
 		this.commentPersonId = commentPersonId;
-		this.comment = comment;
+		this.content = content;
 		this.currentDateTime = currentDateTime;
 	}
 }

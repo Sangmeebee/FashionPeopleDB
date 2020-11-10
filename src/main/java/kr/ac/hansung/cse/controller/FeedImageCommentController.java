@@ -35,7 +35,7 @@ public class FeedImageCommentController {
 		if (feedImageData.isPresent()) {
 			FeedImage image = feedImageData.get();
 			LocalDateTime currentDateTime = LocalDateTime.now();
-			FeedImageComment _comment = new FeedImageComment(comment.getCommentPersonId(), comment.getComment(), currentDateTime);
+			FeedImageComment _comment = new FeedImageComment(comment.getCommentPersonId(), comment.getContent(), currentDateTime);
 			List<FeedImageComment> comments = image.getComments();
 			comments.add(_comment);
 			image.setComments(comments);
