@@ -31,7 +31,7 @@ public class SaveImageController {
     SaveImageRepository saveImageRepository;
     
     @GetMapping("/{userId}")
-    public ResponseEntity<List<SaveImage>> getFeedImages(@PathVariable("userId") String userId) {
+    public ResponseEntity<List<SaveImage>> getSaveImages(@PathVariable("userId") String userId) {
 		Optional<FUser> userData = fUserRepository.findById(userId);
 		FUser user = userData.get();
 		List<SaveImage> images = user.getSaveImages();
