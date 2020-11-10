@@ -57,6 +57,10 @@ public class FUser implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private List<Following> followings = new ArrayList<Following>();
+    
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private List<SaveImage> saveImages = new ArrayList<SaveImage>();
 
     @JsonIgnoreProperties({"user"})
     @OneToMany(mappedBy = "user")
