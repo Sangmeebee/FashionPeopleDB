@@ -1,9 +1,11 @@
 package kr.ac.hansung.cse.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,7 +34,8 @@ public class FeedImageCommentController {
 		Optional<FeedImage> feedImageData = feedImageRepository.findById(imageName);
 		if (feedImageData.isPresent()) {
 			FeedImage image = feedImageData.get();
-			FeedImageComment _comment = new FeedImageComment(comment.getCommentPersonId(), comment.getComment());
+			LocalDateTime currentDateTime = LocalDateTime.now();
+			FeedImageComment _comment = new FeedImageComment(comment.getCommentPersonId(), comment.getComment(), currentDateTime);
 			List<FeedImageComment> comments = image.getComments();
 			comments.add(_comment);
 			image.setComments(comments);

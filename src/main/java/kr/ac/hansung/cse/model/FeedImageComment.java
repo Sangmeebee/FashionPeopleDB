@@ -1,6 +1,7 @@
 package kr.ac.hansung.cse.model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -47,11 +50,16 @@ public class FeedImageComment implements Serializable {
 	@Column(name="comment")
 	private String comment;
 	
+	@Column(name = "current_date_time")
+	@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime currentDateTime;
+	
 	@Column(name="image_id")
 	private String imageId;
 
-	public FeedImageComment(String commentPersonId, String comment) {
+	public FeedImageComment(String commentPersonId, String comment, LocalDateTime currentDateTime) {
 		this.commentPersonId = commentPersonId;
 		this.comment = comment;
+		this.currentDateTime = currentDateTime;
 	}
 }
