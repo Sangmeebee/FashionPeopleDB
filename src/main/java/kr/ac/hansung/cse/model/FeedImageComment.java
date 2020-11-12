@@ -44,9 +44,6 @@ public class FeedImageComment implements Serializable {
 	@Column(name = "id")
 	private int id;
 	
-	@Column(name = "comment_person_id")	
-	private String commentPersonId;
-	
 	@Column(name="content")
 	private String content;
 	
@@ -56,10 +53,15 @@ public class FeedImageComment implements Serializable {
 	
 	@Column(name="image_id")
 	private String imageId;
+	
+	@JsonIgnoreProperties({"comments"})
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private FUser user;
 
-	public FeedImageComment(String commentPersonId, String content, LocalDateTime currentDateTime) {
-		this.commentPersonId = commentPersonId;
+	public FeedImageComment(String content, LocalDateTime currentDateTime, FUser user) {
 		this.content = content;
 		this.currentDateTime = currentDateTime;
+		this.user = user;
 	}
 }

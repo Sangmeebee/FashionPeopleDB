@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import kr.ac.hansung.cse.model.FUser;
 import kr.ac.hansung.cse.model.FeedImage;
 import kr.ac.hansung.cse.model.FeedImageComment;
+import kr.ac.hansung.cse.repo.FUserRepository;
 import kr.ac.hansung.cse.repo.FeedImageCommentRepository;
 import kr.ac.hansung.cse.repo.FeedImageRepository;
 
@@ -25,17 +27,21 @@ import kr.ac.hansung.cse.repo.FeedImageRepository;
 public class FeedImageCommentController {
 
 	@Autowired
+	FUserRepository fUserRepository;
+	@Autowired
 	FeedImageRepository feedImageRepository;
 	@Autowired
 	FeedImageCommentRepository feedImageCommentRepository;
 	
-	@PutMapping("/{imageName}")
-	public ResponseEntity<FeedImage> updateImageComment(@PathVariable("imageName") String imageName, @RequestBody FeedImageComment comment) {
+	@PutMapping("/{userId}/{imageName}")
+	public ResponseEntity<FeedImage> updateImageComment(@PathVariable("userId") String userId, @PathVariable("imageName") String imageName, @RequestBody FeedImageComment comment) {
 		Optional<FeedImage> feedImageData = feedImageRepository.findById(imageName);
+		Optional<FUser> fUserData = fUserRepository.findById(userId);
+		FUser user = fUserData.get();
 		if (feedImageData.isPresent()) {
 			FeedImage image = feedImageData.get();
 			LocalDateTime currentDateTime = LocalDateTime.now();
-			FeedImageComment _comment = new FeedImageComment(comment.getCommentPersonId(), comment.getContent(), currentDateTime);
+			FeedImageComment _comment = new FeedImageComment(comment.getContent(), currentDateTime, user);
 			List<FeedImageComment> comments = image.getComments();
 			comments.add(_comment);
 			image.setComments(comments);
