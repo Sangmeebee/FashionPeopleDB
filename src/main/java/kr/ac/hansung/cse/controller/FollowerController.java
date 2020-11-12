@@ -27,31 +27,12 @@ public class FollowerController {
 	@Autowired
 	FollowerRepository followerRepository;
 
-	@PutMapping("/{userId}")
-	public ResponseEntity<FUser> updateFollower(@PathVariable("userId") String userId,
-			@RequestBody Follower follower) {
-		Optional<FUser> fUserData = fUserRepository.findById(userId);
-		if (fUserData.isPresent()) {
-			FUser user = fUserData.get();
-			Follower _follower = new Follower(follower.getFollowerPersonId());
-			List<Follower> followers = user.getFollowers();
-			followers.add(_follower);
-			user.setFollowers(followers);
-
-			return new ResponseEntity<>(fUserRepository.save(user), HttpStatus.OK);
-
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-	}
-
 	@GetMapping("/{userId}")
-		public ResponseEntity<List<Follower>> getFollower(@PathVariable("userId") String userId) {
-			List<Follower> followerData = followerRepository.findByUserId(userId);
-		
-			if (followerData.isEmpty()) {
-	            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-	        }
-	        return new ResponseEntity<>(followerData, HttpStatus.OK);
-		}
+	public ResponseEntity<List<Follower>> getFollower(@PathVariable("userId") String userId) {
+		Optional<FUser> fUserData = fUserRepository.findById(userId);
+		FUser user = fUserData.get();
+		List<Follower> followerData = followerRepository.findByUser(user);
+
+		return new ResponseEntity<>(followerData, HttpStatus.OK);
+	}
 }

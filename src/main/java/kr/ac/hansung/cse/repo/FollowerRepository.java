@@ -4,8 +4,9 @@ import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
 
+import kr.ac.hansung.cse.model.FUser;
 import kr.ac.hansung.cse.model.Follower;
 
 public interface FollowerRepository extends CrudRepository<Follower, Integer> {
-	List<Follower> findByUserId(String userId);
+	List<Follower> findByUser(FUser user);
 }

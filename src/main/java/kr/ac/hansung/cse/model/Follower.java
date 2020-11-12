@@ -6,6 +6,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,14 +25,17 @@ public class Follower {
 	@GeneratedValue
 	@Column(name = "id")
 	private int id;
-	
-	@Column(name = "follower_person_id")	
-	private String followerPersonId;
-	
-	@Column(name="user_id")
-	private String userId;
 
-	public Follower(String followerPersonId) {
-		this.followerPersonId = followerPersonId;
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private FUser user;
+	
+	@ManyToOne
+	@JoinColumn(name = "follower_id")
+	private FUser follower;
+
+	public Follower(FUser user, FUser follower) {
+		this.user = user;
+		this.follower = follower;
 	}
 }

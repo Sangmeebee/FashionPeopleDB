@@ -50,19 +50,19 @@ public class FUser implements Serializable {
     @Column(name = "profile_image")
     private String profileImage;
     
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private List<Follower> followers = new ArrayList<Follower>();
+    @Column(name = "follower_num")
+    private int followerNum;
     
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private List<Following> followings = new ArrayList<Following>();
+    @Column(name = "following_num")
+    private int followingNum;
 
     public FUser(String id, String name, String instagramId, String profileImage) {
         this.id = id;
         this.name = name;
         this.instagramId = instagramId;
         this.profileImage = profileImage;
+        this.followerNum = 0;
+        this.followingNum = 0;
     }
 
 }
