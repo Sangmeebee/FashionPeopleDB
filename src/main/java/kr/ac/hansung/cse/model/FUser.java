@@ -62,10 +62,6 @@ public class FUser implements Serializable {
     @JoinColumn(name = "user_id")
     private List<SaveImage> saveImages = new ArrayList<SaveImage>();
 
-    @JsonIgnoreProperties({"user"})
-    @OneToMany(mappedBy = "user")
-    private List<FeedImage> images = new ArrayList<>();
-
     public FUser(String id, String name, String instagramId, String profileImage) {
         this.id = id;
         this.name = name;

@@ -48,7 +48,7 @@ public class FeedImageController {
 	public ResponseEntity<List<FeedImage>> getUserImages(@PathVariable("id") String id) {
 		Optional<FUser> userData = fUserrepository.findById(id);
 		FUser user = userData.get();
-		List<FeedImage> images = user.getImages();
+		List<FeedImage> images = feedImageRepository.findByUser(user);
 		if (images.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }

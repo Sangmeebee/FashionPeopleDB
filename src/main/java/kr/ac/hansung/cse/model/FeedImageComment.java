@@ -54,7 +54,6 @@ public class FeedImageComment implements Serializable {
 	@Column(name="image_id")
 	private String imageId;
 	
-	@JsonIgnoreProperties({"comments"})
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private FUser user;

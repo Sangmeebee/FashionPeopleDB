@@ -68,9 +68,8 @@ public class FeedImage implements Serializable {
     @JoinColumn(name = "image_id")
     private List<FeedImageComment> comments = new ArrayList<FeedImageComment>();
     
-    @JsonIgnoreProperties({"images"})
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+	@ManyToOne
+	@JoinColumn(name = "user_id")
     private FUser user;
     
     @JsonIgnoreProperties({"image"})
