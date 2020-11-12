@@ -67,23 +67,7 @@ public class FeedImage implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "user_id")
     private FUser user;
-    
-    @JsonIgnoreProperties({"image"})
-    @OneToMany(mappedBy = "image")
-    private List<SaveImage> saveImages = new ArrayList<>();
-    
 
-
-    public FeedImage(String imageName, String timeStamp, String style, String top, String pants, String shoes, int rank, boolean battleNow) {
-        this.imageName = imageName;
-        this.timeStamp = timeStamp;
-        this.style = style;
-        this.top = top;
-        this.pants = pants;
-        this.shoes = shoes;
-        this.rank = rank;
-        this.battleNow = battleNow;
-    }
 
     public FeedImage(String imageName, String timeStamp, String style, String top, String pants, String shoes, int rank, boolean battleNow, FUser user) {
         this.imageName = imageName;

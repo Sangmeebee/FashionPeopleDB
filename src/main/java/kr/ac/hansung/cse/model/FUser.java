@@ -57,10 +57,6 @@ public class FUser implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private List<Following> followings = new ArrayList<Following>();
-    
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private List<SaveImage> saveImages = new ArrayList<SaveImage>();
 
     public FUser(String id, String name, String instagramId, String profileImage) {
         this.id = id;

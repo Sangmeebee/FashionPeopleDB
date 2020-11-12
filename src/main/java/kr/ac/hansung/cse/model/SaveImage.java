@@ -42,15 +42,16 @@ public class SaveImage implements Serializable {
 	@Column(name = "id")
 	private int id;
 	
-    @JsonIgnoreProperties({"saveimages"})
-    @ManyToOne
-    @JoinColumn(name = "image_id")
-    private FeedImage image;
+	@ManyToOne
+	@JoinColumn(name = "image_name")
+	private FeedImage image;
 
-	@Column(name="user_id")
-	private String userId;
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+    private FUser user;
 
-    public SaveImage(FeedImage image) {
+    public SaveImage(FUser user, FeedImage image) {
+    	this.user = user;
         this.image = image;
     }
 }

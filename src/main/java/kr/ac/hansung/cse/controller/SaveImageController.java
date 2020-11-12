@@ -34,7 +34,7 @@ public class SaveImageController {
     public ResponseEntity<List<SaveImage>> getSaveImages(@PathVariable("userId") String userId) {
 		Optional<FUser> userData = fUserRepository.findById(userId);
 		FUser user = userData.get();
-		List<SaveImage> images = user.getSaveImages();
+		List<SaveImage> images = saveImageRepository.findByUser(user);
 		if (images.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -42,15 +42,12 @@ public class SaveImageController {
 	}
     
 	@PutMapping("/{userId}/{imageName}")
-	public ResponseEntity<FUser> updateSaveImage(@PathVariable("userId") String userId, @PathVariable("imageName") String imageName) {
+	public ResponseEntity<SaveImage> updateSaveImage(@PathVariable("userId") String userId, @PathVariable("imageName") String imageName) {
 		Optional<FUser> fUserData = fUserRepository.findById(userId);
 		FUser user = fUserData.get();
 		Optional<FeedImage> feedImageData = feedImageRepository.findById(imageName);
 		FeedImage image = feedImageData.get();
-		SaveImage saveImage = new SaveImage(image);
-		List<SaveImage> saveImages = user.getSaveImages();
-		saveImages.add(saveImage);
-		user.setSaveImages(saveImages);
-		return new ResponseEntity<>(fUserRepository.save(user), HttpStatus.OK);
+		SaveImage saveImage = new SaveImage(user, image);
+		return new ResponseEntity<>(saveImageRepository.save(saveImage), HttpStatus.OK);
 	}
 }
