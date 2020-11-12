@@ -51,16 +51,18 @@ public class FeedImageComment implements Serializable {
 	@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime currentDateTime;
 	
-	@Column(name="image_id")
-	private String imageId;
+	@ManyToOne
+	@JoinColumn(name = "image_name")
+	private FeedImage image;
 	
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private FUser user;
 
-	public FeedImageComment(String content, LocalDateTime currentDateTime, FUser user) {
+	public FeedImageComment(String content, LocalDateTime currentDateTime, FUser user, FeedImage image) {
 		this.content = content;
 		this.currentDateTime = currentDateTime;
 		this.user = user;
+		this.image = image;
 	}
 }

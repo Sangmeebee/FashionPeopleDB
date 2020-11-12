@@ -32,35 +32,30 @@ public class FeedImageCommentController {
 	FeedImageRepository feedImageRepository;
 	@Autowired
 	FeedImageCommentRepository feedImageCommentRepository;
-	
+
 	@PutMapping("/{userId}/{imageName}")
-	public ResponseEntity<FeedImage> updateImageComment(@PathVariable("userId") String userId, @PathVariable("imageName") String imageName, @RequestBody FeedImageComment comment) {
+	public ResponseEntity<FeedImageComment> updateImageComment(@PathVariable("userId") String userId,
+			@PathVariable("imageName") String imageName, @RequestBody FeedImageComment comment) {
 		Optional<FeedImage> feedImageData = feedImageRepository.findById(imageName);
+		FeedImage image = feedImageData.get();
 		Optional<FUser> fUserData = fUserRepository.findById(userId);
 		FUser user = fUserData.get();
-		if (feedImageData.isPresent()) {
-			FeedImage image = feedImageData.get();
-			LocalDateTime currentDateTime = LocalDateTime.now();
-			FeedImageComment _comment = new FeedImageComment(comment.getContent(), currentDateTime, user);
-			List<FeedImageComment> comments = image.getComments();
-			comments.add(_comment);
-			image.setComments(comments);
-			
-			return new ResponseEntity<>(feedImageRepository.save(image), HttpStatus.OK);
-			
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
+		LocalDateTime currentDateTime = LocalDateTime.now();
+		FeedImageComment _comment = new FeedImageComment(comment.getContent(), currentDateTime, user, image);
+		return new ResponseEntity<>(feedImageCommentRepository.save(_comment), HttpStatus.OK);
+
 	}
-	
+
 	@GetMapping("/{imageName}")
 	public ResponseEntity<List<FeedImageComment>> getImageComment(@PathVariable("imageName") String imageName) {
-		List<FeedImageComment> commentData = feedImageCommentRepository.findByImageId(imageName);
-	
+		Optional<FeedImage> feedImageData = feedImageRepository.findById(imageName);
+		FeedImage image = feedImageData.get();
+		List<FeedImageComment> commentData = feedImageCommentRepository.findByImage(image);
+
 		if (commentData.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(commentData, HttpStatus.OK);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<>(commentData, HttpStatus.OK);
 	}
 
 }

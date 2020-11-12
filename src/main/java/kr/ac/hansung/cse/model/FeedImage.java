@@ -63,11 +63,7 @@ public class FeedImage implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "image_id")
     private List<FeedImageEvaluation> evaluations = new ArrayList<FeedImageEvaluation>();
-    
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "image_id")
-    private List<FeedImageComment> comments = new ArrayList<FeedImageComment>();
-    
+        
 	@ManyToOne
 	@JoinColumn(name = "user_id")
     private FUser user;
