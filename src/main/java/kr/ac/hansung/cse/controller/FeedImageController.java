@@ -1,6 +1,9 @@
 package kr.ac.hansung.cse.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,16 +20,22 @@ import org.springframework.web.bind.annotation.RestController;
 import kr.ac.hansung.cse.model.FUser;
 import kr.ac.hansung.cse.model.FeedImage;
 import kr.ac.hansung.cse.model.FeedImageEvaluation;
+import kr.ac.hansung.cse.model.Following;
 import kr.ac.hansung.cse.repo.FUserRepository;
 import kr.ac.hansung.cse.repo.FeedImageRepository;
+import kr.ac.hansung.cse.repo.FollowingRepository;
 
 @RestController
 @RequestMapping("/feedImage")
 public class FeedImageController {
     @Autowired
     FUserRepository fUserrepository;
+    
     @Autowired
     FeedImageRepository feedImageRepository;
+    
+    @Autowired
+    FollowingRepository followingRepository;
 
     @GetMapping
     public ResponseEntity<List<FeedImage>> getAllImages() {
@@ -105,5 +114,34 @@ public class FeedImageController {
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.EXPECTATION_FAILED);
 		}
+    }
+    
+    @GetMapping("/following/{userId}")
+    public ResponseEntity<List<FeedImage>> getFollowingFeedImages(@PathVariable("userId") String userId) {
+    	Optional<FUser> fuserOptional = fUserrepository.findById(userId);
+    	System.out.println(fuserOptional.isPresent());
+    	if(fuserOptional.isPresent()) {
+    		FUser fuser = fuserOptional.get();
+    		List<Following> followingList = followingRepository.findByUser(fuser);
+    		
+    		List<FeedImage> feedImages = new LinkedList<>();
+    		
+    		for(int i=0; i<followingList.size(); i++) {
+    			List<FeedImage> images = feedImageRepository.findByUser(followingList.get(i).getFollowing());
+    			feedImages.addAll(images);
+    		}
+    		feedImages.sort(new Comparator<FeedImage>() {
+
+				@Override
+				public int compare(FeedImage o1, FeedImage o2) {
+					return o2.getTimeStamp().compareTo(o1.getTimeStamp());
+				}
+    			
+    		});
+    		return new ResponseEntity<List<FeedImage>>(feedImages, HttpStatus.OK);	
+    	} else {
+    		return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+    	}
+    	
     }
 }
