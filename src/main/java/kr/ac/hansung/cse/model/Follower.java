@@ -25,6 +25,9 @@ public class Follower {
 	@GeneratedValue
 	@Column(name = "id")
 	private int id;
+	
+	@Column(name="is_following")
+	private boolean isFollowing;
 
 	@ManyToOne
 	@JoinColumn(name = "user_id")
@@ -34,8 +37,9 @@ public class Follower {
 	@JoinColumn(name = "follower_id")
 	private FUser follower;
 
-	public Follower(FUser user, FUser follower) {
+	public Follower(FUser user, FUser follower, boolean isFollowing) {
 		this.user = user;
 		this.follower = follower;
+		this.isFollowing = isFollowing;
 	}
 }
