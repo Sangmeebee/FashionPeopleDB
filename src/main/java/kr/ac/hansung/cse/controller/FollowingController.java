@@ -32,6 +32,15 @@ public class FollowingController {
 	@Autowired
 	FollowerRepository followerRepository;
 
+	
+	@GetMapping("/{userId}")
+	public ResponseEntity<List<Following>> getFollowing(@PathVariable("userId") String userId) {
+		Optional<FUser> fUserData = fUserRepository.findById(userId);
+		FUser user = fUserData.get();
+		List<Following> followingData = followingRepository.findByUser(user);
+		return new ResponseEntity<>(followingData, HttpStatus.OK);
+	}
+	
 	@PutMapping("/{userId}/{followingId}")
 	public ResponseEntity<Following> updateFollowing(@PathVariable("userId") String userId,
 			@PathVariable("followingId") String followingId) {
@@ -41,7 +50,7 @@ public class FollowingController {
 		FUser user = fUserData.get();
 		// 나의 following에 following 추가
 		Following _following = new Following(user, following);
-		user.setFollowingNum(user.getFollowerNum()+1);
+		user.setFollowingNum(user.getFollowingNum()+1);
 		// following의 follower에 user 추가
 		//
 		List<Follower> followers = followerRepository.findByUser(user);
@@ -70,11 +79,52 @@ public class FollowingController {
 		return new ResponseEntity<>(followingRepository.save(_following), HttpStatus.OK);
 	}
 	
-	@GetMapping("/{userId}")
-	public ResponseEntity<List<Following>> getFollowing(@PathVariable("userId") String userId) {
-		Optional<FUser> fUserData = fUserRepository.findById(userId);
-		FUser user = fUserData.get();
-		List<Following> followingData = followingRepository.findByUser(user);
-		return new ResponseEntity<>(followingData, HttpStatus.OK);
+
+	@DeleteMapping("/{userId}/{followingId}")
+	public ResponseEntity<HttpStatus> deletFollowing(@PathVariable("userId") String userId,
+			@PathVariable("followingId") String followingId) {
+		try {
+			Optional<FUser> fUserData = fUserRepository.findById(userId);
+			Optional<FUser> followingData = fUserRepository.findById(followingId);
+			FUser following = followingData.get();
+			FUser user = fUserData.get();
+			// 나의 following에 following 제거 
+			List<Following> _followings = followingRepository.findByUser(user);
+			for(Following _following : _followings) {
+				if(_following.getFollowing().getId().equals(followingId)) {
+					followingRepository.delete(_following);
+					
+					user.setFollowingNum(user.getFollowingNum()-1);
+					fUserRepository.save(user);
+					break;
+				}
+			}
+
+			// following의 follower에 user 제거	
+			List<Follower> followers = followerRepository.findByUser(user);
+			List<Follower> ffollowers = followerRepository.findByUser(following);
+			for(Follower f : followers) {
+				if(f.getFollower().getId().equals(followingId)) {
+					f.setFollowing(false);
+					followerRepository.save(f);
+					break;
+				}
+			}
+			
+			for (Follower ff : ffollowers) {
+				if(ff.getFollower().getId().equals(userId)) {
+					followerRepository.delete(ff);
+					
+					following.setFollowerNum(following.getFollowerNum()-1);
+					fUserRepository.save(following);
+					break;
+				}
+			}
+			
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
+		}
+
 	}
 }
