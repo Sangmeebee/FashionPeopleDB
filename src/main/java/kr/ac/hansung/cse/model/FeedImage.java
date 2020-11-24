@@ -38,7 +38,6 @@ public class FeedImage implements Serializable {
     @Column(name = "image_name")
     private String imageName;
 
-    @CreationTimestamp   
     @Column(name = "timeStamp")
     private LocalDateTime timeStamp;
 
@@ -84,6 +83,7 @@ public class FeedImage implements Serializable {
         this.rank = rank;
         this.evaluateNow = evaluateNow;
         this.resultRating = resultRating;
+        this.timeStamp = LocalDateTime.now();
         this.resultTimeStamp = null;
         this.user = user;      
     }
