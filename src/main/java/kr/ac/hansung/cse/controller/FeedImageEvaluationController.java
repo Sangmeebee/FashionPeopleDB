@@ -1,5 +1,6 @@
 package kr.ac.hansung.cse.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,35 +27,48 @@ import kr.ac.hansung.cse.repo.FeedImageRepository;
 public class FeedImageEvaluationController {
 
 	@Autowired
+	FUserRepository fUserRepository;
+	@Autowired
 	FeedImageRepository feedImageRepository;
 	@Autowired
 	FeedImageEvaluationRepository feedImageEvaluationRepository;
-	
+
 	@PutMapping("/{imageName}")
-	public ResponseEntity<FeedImage> updateImageEvaluation(@PathVariable("imageName") String imageName, @RequestBody FeedImageEvaluation evaluation) {
+	public ResponseEntity<FeedImageEvaluation> updateImageEvaluation(@PathVariable("imageName") String imageName,
+			@RequestBody FeedImageEvaluation evaluation) {
 		Optional<FeedImage> feedImageData = feedImageRepository.findById(imageName);
-		if (feedImageData.isPresent()) {
-			FeedImage image = feedImageData.get();
-			FeedImageEvaluation _evaluation = new FeedImageEvaluation(evaluation.getEvaluationPersonId(), evaluation.getScore());
+		FeedImage image = feedImageData.get();
+		if (image.getEvaluations().size() == 3) {
+			return new ResponseEntity<>(null, HttpStatus.EXPECTATION_FAILED);
+		} else {
+			FeedImageEvaluation _evaluation = new FeedImageEvaluation(evaluation.getEvaluationPersonId(),
+					evaluation.getScore());
 			List<FeedImageEvaluation> evaluations = image.getEvaluations();
 			evaluations.add(_evaluation);
 			image.setEvaluations(evaluations);
-			
-			return new ResponseEntity<>(feedImageRepository.save(image), HttpStatus.OK);
-			
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			if (evaluations.size() == 3) {
+				Optional<FUser> fUserData = fUserRepository.findById(image.getUser().getId());
+				FUser user = fUserData.get();
+				user.setEvaluateNow(false);
+				fUserRepository.save(user);
+				image.setEvaluateNow(false);
+				image.setResultTimeStamp(LocalDateTime.now());
+				float sum = 0;
+				for (FeedImageEvaluation evalu : image.getEvaluations()) {
+					sum += evalu.getScore();
+				}
+				image.setResultRating(sum / image.getEvaluations().size());
+			}
+			feedImageRepository.save(image);
+			return new ResponseEntity<>(_evaluation, HttpStatus.CREATED);
 		}
 	}
-	
+
 	@GetMapping("/{imageName}")
 	public ResponseEntity<List<FeedImageEvaluation>> getImageEvaluation(@PathVariable("imageName") String imageName) {
 		List<FeedImageEvaluation> evaluationData = feedImageEvaluationRepository.findByImageId(imageName);
-	
-		if (evaluationData.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(evaluationData, HttpStatus.OK);
+
+		return new ResponseEntity<>(evaluationData, HttpStatus.OK);
 	}
 
 }

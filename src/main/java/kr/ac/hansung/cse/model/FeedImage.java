@@ -1,6 +1,7 @@
 package kr.ac.hansung.cse.model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,9 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-
+import org.hibernate.annotations.CreationTimestamp;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -39,8 +38,9 @@ public class FeedImage implements Serializable {
     @Column(name = "image_name")
     private String imageName;
 
+    @CreationTimestamp   
     @Column(name = "timeStamp")
-    private String timeStamp;
+    private LocalDateTime timeStamp;
 
     @Column(name = "style")
     private String style;
@@ -57,8 +57,14 @@ public class FeedImage implements Serializable {
     @Column(name = "rank")
     private int rank;
 
-    @Column(name = "battle_now")
-    private boolean battleNow;
+    @Column(name = "evaluate_now")
+    private boolean evaluateNow;
+    
+    @Column(name = "result_rating")
+    private float resultRating;
+    
+    @Column(name = "resultTimeStamp")
+    private LocalDateTime resultTimeStamp;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "image_id")
@@ -69,16 +75,17 @@ public class FeedImage implements Serializable {
     private FUser user;
 
 
-    public FeedImage(String imageName, String timeStamp, String style, String top, String pants, String shoes, int rank, boolean battleNow, FUser user) {
+    public FeedImage(String imageName, String style, String top, String pants, String shoes, int rank, boolean evaluateNow, float resultRating, FUser user) {
         this.imageName = imageName;
-        this.timeStamp = timeStamp;
         this.style = style;
         this.top = top;
         this.pants = pants;
         this.shoes = shoes;
         this.rank = rank;
-        this.battleNow = battleNow;
-        this.user = user;
+        this.evaluateNow = evaluateNow;
+        this.resultRating = resultRating;
+        this.resultTimeStamp = null;
+        this.user = user;      
     }
 
 }

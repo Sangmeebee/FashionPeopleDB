@@ -55,14 +55,18 @@ public class FUser implements Serializable {
     
     @Column(name = "following_num")
     private int followingNum;
+    
+    @Column(name = "evaluate_now")
+    private boolean evaluateNow;
 
-    public FUser(String id, String name, String instagramId, String profileImage) {
+    public FUser(String id, String name, String instagramId, String profileImage, boolean evaluateNow) {
         this.id = id;
         this.name = name;
         this.instagramId = instagramId;
         this.profileImage = profileImage;
         this.followerNum = 0;
         this.followingNum = 0;
+        this.evaluateNow = evaluateNow;
     }
 
 }

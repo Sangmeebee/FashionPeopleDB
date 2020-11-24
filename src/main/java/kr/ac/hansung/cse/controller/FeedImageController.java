@@ -89,7 +89,7 @@ public class FeedImageController {
                 		}
                 	}
             	}
-            	if(image.getEvaluations().size() < 10 && !image.getUser().getId().equals(id) && !isAlreadyEvaluation) {
+            	if(image.isEvaluateNow() && !image.getUser().getId().equals(id) && !isAlreadyEvaluation) {
             		_images.add(image);
             	}
             }
@@ -104,8 +104,10 @@ public class FeedImageController {
     public ResponseEntity<FeedImage> saveFeedImage(@PathVariable("id") String id, @RequestBody FeedImage image) {
     	Optional<FUser> userData = fUserrepository.findById(id);
     	FUser user = userData.get();
-    	FeedImage mImage = new FeedImage(image.getImageName(), image.getTimeStamp(), image.getStyle(), image.getTop(), image.getPants(), image.getShoes(), image.getRank(), image.isBattleNow(), user);
+    	FeedImage mImage = new FeedImage(image.getImageName(), image.getStyle(), image.getTop(), image.getPants(), image.getShoes(), image.getRank(), image.isEvaluateNow(), image.getResultRating(), user);
     	try {
+    		user.setEvaluateNow(true);
+    		fUserrepository.save(user);
 			FeedImage _image = feedImageRepository.save(mImage);
 			return new ResponseEntity<>(_image, HttpStatus.CREATED);
 		} catch (Exception e) {

@@ -81,7 +81,7 @@ public class SigninController {
 	@PostMapping
 	public ResponseEntity<FUser> postUser(@RequestBody FUser user) {
 		try {
-			FUser _user = fUserrepository.save(new FUser(user.getId(), user.getName(), user.getInstagramId(), user.getProfileImage()));
+			FUser _user = fUserrepository.save(new FUser(user.getId(), user.getName(), user.getInstagramId(), user.getProfileImage(), user.isEvaluateNow()));
 			return new ResponseEntity<>(_user, HttpStatus.CREATED);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.EXPECTATION_FAILED);
