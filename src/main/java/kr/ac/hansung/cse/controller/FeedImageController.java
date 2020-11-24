@@ -42,10 +42,6 @@ public class FeedImageController {
 		List<FeedImage> images = new ArrayList<>();
 		try {
 			feedImageRepository.findAll().forEach(images::add);
-
-			if (images.isEmpty()) {
-				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-			}
 			return new ResponseEntity<>(images, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
