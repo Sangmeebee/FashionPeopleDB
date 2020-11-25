@@ -72,7 +72,6 @@ public class FollowingController {
 		Set<String> keys = map.keySet();
 		for(Following uFollowing : userFollowings) {
 			for (String fid : keys) {
-				System.out.println(uFollowing.getFollowing().getId());
 				if(fid.equals(uFollowing.getFollowing().getId())) {
 					map.put(fid, true);
 				}
@@ -95,7 +94,6 @@ public class FollowingController {
 		Set<String> keys = map.keySet();
 		for(Following uFollowing : userFollowings) {
 			for (String fid : keys) {
-				System.out.println(uFollowing.getFollowing().getId());
 				if(fid.equals(uFollowing.getFollowing().getId())) {
 					map.put(fid, true);
 				}
