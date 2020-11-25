@@ -1,7 +1,10 @@
 package kr.ac.hansung.cse.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import kr.ac.hansung.cse.model.FUser;
 import kr.ac.hansung.cse.model.Follower;
 import kr.ac.hansung.cse.model.Following;
+import kr.ac.hansung.cse.model.RankImage;
 import kr.ac.hansung.cse.repo.FUserRepository;
 import kr.ac.hansung.cse.repo.FollowerRepository;
 import kr.ac.hansung.cse.repo.FollowingRepository;
@@ -53,6 +57,52 @@ public class FollowingController {
 			}
 		}
 		return new ResponseEntity<>(isFollowing, HttpStatus.OK);
+	}
+	
+	@GetMapping("/isFollowingsFollowing/{userId}/{customId}")
+	public ResponseEntity<Map<String, Boolean>> getIsFollowingsFollowing(@PathVariable("userId") String userId, @PathVariable("customId") String customId) {
+		FUser user = fUserRepository.findById(userId).get();
+		FUser custom = fUserRepository.findById(customId).get();
+		Map<String, Boolean> map = new HashMap<>();
+		List<Following> customFollowings = followingRepository.findByUser(custom);
+		for(Following cFollowing : customFollowings) {
+			map.put(cFollowing.getFollowing().getId(), false);
+		}
+		List<Following> userFollowings = followingRepository.findByUser(user);
+		Set<String> keys = map.keySet();
+		for(Following uFollowing : userFollowings) {
+			for (String fid : keys) {
+				System.out.println(uFollowing.getFollowing().getId());
+				if(fid.equals(uFollowing.getFollowing().getId())) {
+					map.put(fid, true);
+				}
+			}
+		}
+
+		return new ResponseEntity<>(map, HttpStatus.OK);
+	}
+	
+	@GetMapping("/isFollowingsFollower/{userId}/{customId}")
+	public ResponseEntity<Map<String, Boolean>> getIsFollowingsFollower(@PathVariable("userId") String userId, @PathVariable("customId") String customId) {
+		FUser user = fUserRepository.findById(userId).get();
+		FUser custom = fUserRepository.findById(customId).get();
+		Map<String, Boolean> map = new HashMap<>();
+		List<Follower> customFollowers = followerRepository.findByUser(custom);
+		for(Follower cFollower : customFollowers) {
+			map.put(cFollower.getFollower().getId(), false);
+		}
+		List<Following> userFollowings = followingRepository.findByUser(user);
+		Set<String> keys = map.keySet();
+		for(Following uFollowing : userFollowings) {
+			for (String fid : keys) {
+				System.out.println(uFollowing.getFollowing().getId());
+				if(fid.equals(uFollowing.getFollowing().getId())) {
+					map.put(fid, true);
+				}
+			}
+		}
+
+		return new ResponseEntity<>(map, HttpStatus.OK);
 	}
 	
 	@PutMapping("/{userId}/{followingId}")
