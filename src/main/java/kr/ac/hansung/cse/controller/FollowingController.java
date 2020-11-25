@@ -41,6 +41,20 @@ public class FollowingController {
 		return new ResponseEntity<>(followingData, HttpStatus.OK);
 	}
 	
+	@GetMapping("/{userId}/{customId}")
+	public ResponseEntity<Boolean> getIsFollowing(@PathVariable("userId") String userId, @PathVariable("customId") String customId) {
+		Optional<FUser> fUserData = fUserRepository.findById(userId);
+		FUser user = fUserData.get();
+		boolean isFollowing = false;
+		List<Following> followingData = followingRepository.findByUser(user);
+		for(Following following : followingData) {
+			if(following.getFollowing().getId().equals(customId)) {
+				isFollowing = true;
+			}
+		}
+		return new ResponseEntity<>(isFollowing, HttpStatus.OK);
+	}
+	
 	@PutMapping("/{userId}/{followingId}")
 	public ResponseEntity<Following> updateFollowing(@PathVariable("userId") String userId,
 			@PathVariable("followingId") String followingId) {
