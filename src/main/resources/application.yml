@@ -20,4 +20,5 @@ spring:
         format_sql: true
         temp:
           use_jdbc_metadata_defaults: false
+        use-new-id-generator-mappings : false
     generate-ddl: true
