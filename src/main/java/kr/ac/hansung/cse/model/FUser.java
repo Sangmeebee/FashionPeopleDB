@@ -40,9 +40,6 @@ public class FUser implements Serializable {
     @Id
     @Column(name= "id")
     private String id;
-    
-    @Column(name= "password")
-    private String password;
 
     @Column(name = "name")
     private String name;
@@ -65,9 +62,8 @@ public class FUser implements Serializable {
     @Column(name = "evaluate_now")
     private boolean evaluateNow;
 
-    public FUser(String id, String password, String name, String introduce, String gender, String profileImage, boolean evaluateNow) {
+    public FUser(String id, String name, String introduce, String gender, String profileImage, boolean evaluateNow) {
         this.id = id;
-        this.password = password;
         this.name = name;
         this.introduce = introduce;
         this.gender = gender;
