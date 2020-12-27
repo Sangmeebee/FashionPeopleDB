@@ -8,5 +8,4 @@ import kr.ac.hansung.cse.model.FUser;
 import kr.ac.hansung.cse.model.Follower;
 
 public interface FollowerRepository extends CrudRepository<Follower, Integer> {
-	List<Follower> findByUser(FUser user);
 }

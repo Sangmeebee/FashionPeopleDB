@@ -21,6 +21,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Getter;
@@ -76,7 +77,7 @@ public class FeedImage implements Serializable {
     @OneToMany(mappedBy = "image", cascade = CascadeType.ALL)
     private List<FeedImageEvaluation> evaluations = new ArrayList<FeedImageEvaluation>();
     
-    @JsonIgnoreProperties({"image"})
+    @JsonIgnore
     @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany(mappedBy = "image", cascade = CascadeType.ALL)
     private List<FeedImageComment> comments = new ArrayList<FeedImageComment>();

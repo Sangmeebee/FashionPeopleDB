@@ -12,6 +12,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.OnDelete;
@@ -56,26 +57,30 @@ public class FUser implements Serializable {
     @Column(name = "profile_image")
     private String profileImage;
     
-    @Column(name = "follower_num")
-    private int followerNum;
-    
-    @Column(name = "following_num")
-    private int followingNum;
-    
     @Column(name = "evaluate_now")
     private boolean evaluateNow;
     
-    @JsonIgnoreProperties({"user"})
+    @JsonIgnoreProperties({"follower"})
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OneToMany(mappedBy = "follower")
+    private List<Follower> followers = new ArrayList<Follower>();
+  
+    @JsonIgnoreProperties({"following"})
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OneToMany(mappedBy = "following")
+    private List<Following> followings = new ArrayList<Following>();
+    
+    @JsonIgnore
     @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany(mappedBy = "user")
     private List<FeedImage> images = new ArrayList<>();
     
-    @JsonIgnoreProperties({"user"})
+    @JsonIgnore
     @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany(mappedBy = "user")
     private List<FeedImageComment> comments = new ArrayList<FeedImageComment>();
     
-    @JsonIgnoreProperties({"user"})
+    @JsonIgnore
     @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany(mappedBy = "user")
     private List<SaveImage> saveImages = new ArrayList<SaveImage>();
@@ -86,8 +91,6 @@ public class FUser implements Serializable {
         this.introduce = introduce;
         this.gender = gender;
         this.profileImage = profileImage;
-        this.followerNum = 0;
-        this.followingNum = 0;
         this.evaluateNow = evaluateNow;
     }
 

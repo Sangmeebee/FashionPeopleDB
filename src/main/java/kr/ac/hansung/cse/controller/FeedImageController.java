@@ -130,7 +130,7 @@ public class FeedImageController {
 		System.out.println(fuserOptional.isPresent());
 		if (fuserOptional.isPresent()) {
 			FUser fuser = fuserOptional.get();
-			List<Following> followingList = followingRepository.findByUser(fuser);
+			List<Following> followingList = fuser.getFollowings();
 
 			List<FeedImage> feedImages = new LinkedList<>();
 

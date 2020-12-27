@@ -31,7 +31,7 @@ public class FollowerController {
 	public ResponseEntity<List<Follower>> getFollower(@PathVariable("userId") String userId) {
 		Optional<FUser> fUserData = fUserRepository.findById(userId);
 		FUser user = fUserData.get();
-		List<Follower> followerData = followerRepository.findByUser(user);
+		List<Follower> followerData = user.getFollowers();
 
 		return new ResponseEntity<>(followerData, HttpStatus.OK);
 	}

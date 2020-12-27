@@ -17,7 +17,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.ac.hansung.cse.model.FUser;
+import kr.ac.hansung.cse.model.Follower;
+import kr.ac.hansung.cse.model.Following;
 import kr.ac.hansung.cse.repo.FUserRepository;
+import kr.ac.hansung.cse.repo.FollowerRepository;
+import kr.ac.hansung.cse.repo.FollowingRepository;
 
 @RestController
 @RequestMapping("/users")
@@ -25,6 +29,10 @@ public class SigninController {
 	
 	@Autowired
 	FUserRepository fUserrepository;
+	@Autowired
+	FollowingRepository followingRepository;
+	@Autowired
+	FollowerRepository followerRepository;
 
 	@GetMapping
 	public ResponseEntity<List<FUser>> getAllUsers() {
@@ -52,6 +60,17 @@ public class SigninController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") String id) {
 		try {
+			Optional<FUser> fusers = fUserrepository.findById(id);
+			if(fusers.isPresent()) {
+				List<Follower> followers = fusers.get().getFollowers();
+				List<Following> followings = fusers.get().getFollowings();
+				for(Follower follower : followers) {
+					followerRepository.deleteById(follower.getId());
+				}
+				for(Following following : followings) {
+					followerRepository.deleteById(following.getId());
+				}
+			}
 			fUserrepository.deleteById(id);
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		} catch (Exception e) {

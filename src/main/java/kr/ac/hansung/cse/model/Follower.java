@@ -1,6 +1,5 @@
 package kr.ac.hansung.cse.model;
 
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,7 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,16 +30,12 @@ public class Follower {
 	@Column(name="is_following")
 	private boolean isFollowing;
 
-	@OneToOne
-	@JoinColumn(name = "user_id")
-	private FUser user;
-	
-	@OneToOne
+    @JsonIgnoreProperties({"followers"})
+	@ManyToOne
 	@JoinColumn(name = "follower_id")
 	private FUser follower;
 
-	public Follower(FUser user, FUser follower, boolean isFollowing) {
-		this.user = user;
+	public Follower(FUser follower, boolean isFollowing) {
 		this.follower = follower;
 		this.isFollowing = isFollowing;
 	}
