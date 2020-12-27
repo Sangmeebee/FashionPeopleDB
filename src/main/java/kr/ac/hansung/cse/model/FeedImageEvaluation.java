@@ -7,6 +7,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,8 +41,10 @@ public class FeedImageEvaluation implements Serializable{
 	@Column(name="score")
 	private float score;
 	
-	@Column(name="image_id")
-	private String imageId;
+    @JsonIgnoreProperties({"evaluations"})
+	@ManyToOne
+	@JoinColumn(name = "image_name")
+	private FeedImage image;
 
 	public FeedImageEvaluation(String evaluationPersonId, float score) {
 		this.evaluationPersonId = evaluationPersonId;

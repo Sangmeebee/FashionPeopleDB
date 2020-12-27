@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -42,10 +43,12 @@ public class SaveImage implements Serializable {
 	@Column(name = "id")
 	private int id;
 	
-	@ManyToOne
+    @JsonIgnoreProperties({"saveImage"})
+	@OneToOne
 	@JoinColumn(name = "image_name")
 	private FeedImage image;
 
+    @JsonIgnoreProperties({"saveImages"})
 	@ManyToOne
 	@JoinColumn(name = "user_id")
     private FUser user;

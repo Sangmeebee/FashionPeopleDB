@@ -61,6 +61,18 @@ public class FUser implements Serializable {
     
     @Column(name = "evaluate_now")
     private boolean evaluateNow;
+    
+    @JsonIgnoreProperties({"user"})
+    @OneToMany(mappedBy = "user")
+    private List<FeedImage> images = new ArrayList<>();
+    
+    @JsonIgnoreProperties({"user"})
+    @OneToMany(mappedBy = "user")
+    private List<FeedImageComment> comments = new ArrayList<FeedImageComment>();
+    
+    @JsonIgnoreProperties({"user"})
+    @OneToMany(mappedBy = "user")
+    private List<SaveImage> saveImages = new ArrayList<SaveImage>();
 
     public FUser(String id, String name, String introduce, String gender, String profileImage, boolean evaluateNow) {
         this.id = id;

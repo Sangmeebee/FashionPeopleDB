@@ -9,6 +9,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,7 +33,8 @@ public class RankImage implements Serializable{/**
 	@Column(name = "id")
 	private int id;
 	
-	@ManyToOne
+    @JsonIgnoreProperties({"rankImage"})
+	@OneToOne
 	@JoinColumn(name = "image_name")
 	private FeedImage image;
 	

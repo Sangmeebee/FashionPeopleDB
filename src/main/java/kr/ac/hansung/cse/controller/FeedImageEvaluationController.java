@@ -66,7 +66,9 @@ public class FeedImageEvaluationController {
 
 	@GetMapping("/{imageName}")
 	public ResponseEntity<List<FeedImageEvaluation>> getImageEvaluation(@PathVariable("imageName") String imageName) {
-		List<FeedImageEvaluation> evaluationData = feedImageEvaluationRepository.findByImageId(imageName);
+		Optional<FeedImage> feedImageData = feedImageRepository.findById(imageName);
+		FeedImage image = feedImageData.get();
+		List<FeedImageEvaluation> evaluationData = feedImageEvaluationRepository.findByImage(image);
 
 		return new ResponseEntity<>(evaluationData, HttpStatus.OK);
 	}

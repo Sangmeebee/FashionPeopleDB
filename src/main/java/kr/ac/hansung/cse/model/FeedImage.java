@@ -15,8 +15,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.CreationTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -65,14 +69,26 @@ public class FeedImage implements Serializable {
     @Column(name = "resultTimeStamp")
     private LocalDateTime resultTimeStamp;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "image_id")
+    @JsonIgnoreProperties({"image"})
+    @OneToMany(mappedBy = "image")
     private List<FeedImageEvaluation> evaluations = new ArrayList<FeedImageEvaluation>();
+    
+    @JsonIgnoreProperties({"image"})
+    @OneToMany(mappedBy = "image")
+    private List<FeedImageComment> comments = new ArrayList<FeedImageComment>();
+    
+    @JsonIgnoreProperties({"image"})
+    @OneToOne(mappedBy = "image")
+    private RankImage rankImage;
+    
+    @JsonIgnoreProperties({"image"})
+    @OneToOne(mappedBy = "image")
+    private SaveImage saveImage;
         
-	@ManyToOne
-	@JoinColumn(name = "user_id")
+    @JsonIgnoreProperties({"images"})
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private FUser user;
-
 
     public FeedImage(String imageName, String style, String top, String pants, String shoes, int rank, boolean evaluateNow, float resultRating, FUser user) {
         this.imageName = imageName;

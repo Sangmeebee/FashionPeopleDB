@@ -51,6 +51,7 @@ public class FeedImageComment implements Serializable {
 	@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime currentDateTime;
 	
+    @JsonIgnoreProperties({"comments"})
 	@ManyToOne
 	@JoinColumn(name = "image_name")
 	private FeedImage image;

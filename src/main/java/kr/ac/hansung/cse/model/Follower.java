@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,11 +30,11 @@ public class Follower {
 	@Column(name="is_following")
 	private boolean isFollowing;
 
-	@ManyToOne
+	@OneToOne
 	@JoinColumn(name = "user_id")
 	private FUser user;
 	
-	@ManyToOne
+	@OneToOne
 	@JoinColumn(name = "follower_id")
 	private FUser follower;
 
