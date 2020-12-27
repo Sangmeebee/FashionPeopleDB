@@ -51,4 +51,10 @@ public class FeedImageEvaluation implements Serializable{
 		this.score = score;
 	}
 	
+	public FeedImageEvaluation(String evaluationPersonId, float score, FeedImage image) {
+		this.evaluationPersonId = evaluationPersonId;
+		this.score = score;
+		this.image = image;
+	}
+	
 }

@@ -42,10 +42,9 @@ public class FeedImageEvaluationController {
 			return new ResponseEntity<>(null, HttpStatus.EXPECTATION_FAILED);
 		} else {
 			FeedImageEvaluation _evaluation = new FeedImageEvaluation(evaluation.getEvaluationPersonId(),
-					evaluation.getScore());
+					evaluation.getScore(), image);
 			List<FeedImageEvaluation> evaluations = image.getEvaluations();
 			evaluations.add(_evaluation);
-			image.setEvaluations(evaluations);
 			if (evaluations.size() == 3) {
 				Optional<FUser> fUserData = fUserRepository.findById(image.getUser().getId());
 				FUser user = fUserData.get();
@@ -59,7 +58,7 @@ public class FeedImageEvaluationController {
 				}
 				image.setResultRating(sum / image.getEvaluations().size());
 			}
-			feedImageRepository.save(image);
+			feedImageEvaluationRepository.save(_evaluation);
 			return new ResponseEntity<>(_evaluation, HttpStatus.CREATED);
 		}
 	}
