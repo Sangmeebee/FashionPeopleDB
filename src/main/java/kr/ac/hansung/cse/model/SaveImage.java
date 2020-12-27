@@ -43,7 +43,6 @@ public class SaveImage implements Serializable {
 	@Column(name = "id")
 	private int id;
 	
-    @JsonIgnoreProperties({"saveImage"})
 	@OneToOne
 	@JoinColumn(name = "image_name")
 	private FeedImage image;

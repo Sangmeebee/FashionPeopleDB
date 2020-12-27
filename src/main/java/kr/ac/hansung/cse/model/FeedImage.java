@@ -70,20 +70,16 @@ public class FeedImage implements Serializable {
     private LocalDateTime resultTimeStamp;
 
     @JsonIgnoreProperties({"image"})
-    @OneToMany(mappedBy = "image")
+    @OneToMany(mappedBy = "image", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FeedImageEvaluation> evaluations = new ArrayList<FeedImageEvaluation>();
     
     @JsonIgnoreProperties({"image"})
-    @OneToMany(mappedBy = "image")
+    @OneToMany(mappedBy = "image", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<FeedImageComment> comments = new ArrayList<FeedImageComment>();
     
     @JsonIgnoreProperties({"image"})
     @OneToOne(mappedBy = "image")
     private RankImage rankImage;
-    
-    @JsonIgnoreProperties({"image"})
-    @OneToOne(mappedBy = "image")
-    private SaveImage saveImage;
         
     @JsonIgnoreProperties({"images"})
     @ManyToOne
