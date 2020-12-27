@@ -18,6 +18,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -70,11 +72,13 @@ public class FeedImage implements Serializable {
     private LocalDateTime resultTimeStamp;
 
     @JsonIgnoreProperties({"image"})
-    @OneToMany(mappedBy = "image", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OneToMany(mappedBy = "image", cascade = CascadeType.ALL)
     private List<FeedImageEvaluation> evaluations = new ArrayList<FeedImageEvaluation>();
     
     @JsonIgnoreProperties({"image"})
-    @OneToMany(mappedBy = "image", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OneToMany(mappedBy = "image", cascade = CascadeType.ALL)
     private List<FeedImageComment> comments = new ArrayList<FeedImageComment>();
     
     @JsonIgnoreProperties({"image"})
