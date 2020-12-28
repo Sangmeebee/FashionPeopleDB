@@ -135,7 +135,8 @@ public class FeedImageController {
 			List<FeedImage> feedImages = new LinkedList<>();
 
 			for (int i = 0; i < followingList.size(); i++) {
-				List<FeedImage> images = feedImageRepository.findByUser(followingList.get(i).getFollowing());
+				FUser _user = fUserrepository.findById(followingList.get(i).getFollowingId()).get();
+				List<FeedImage> images = feedImageRepository.findByUser(_user);
 				feedImages.addAll(images);
 			}
 			feedImages.sort(new Comparator<FeedImage>() {

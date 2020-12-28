@@ -8,7 +8,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,11 +34,15 @@ public class Follower {
 
     @JsonIgnoreProperties({"followers"})
 	@ManyToOne
-	@JoinColumn(name = "follower_id")
-	private FUser follower;
+	@JoinColumn(name = "user_id")
+	private FUser user;
 
-	public Follower(FUser follower, boolean isFollowing) {
-		this.follower = follower;
+	@Column(name = "follower_id")
+	private String followerId;
+
+	public Follower(FUser user, String followerId, boolean isFollowing) {
+		this.user = user;
+		this.followerId = followerId;
 		this.isFollowing = isFollowing;
 	}
 }

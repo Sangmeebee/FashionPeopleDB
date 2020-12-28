@@ -60,14 +60,14 @@ public class FUser implements Serializable {
     @Column(name = "evaluate_now")
     private boolean evaluateNow;
     
-    @JsonIgnoreProperties({"follower"})
+    @JsonIgnoreProperties({"user"})
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @OneToMany(mappedBy = "follower")
+    @OneToMany(mappedBy = "user")
     private List<Follower> followers = new ArrayList<Follower>();
   
-    @JsonIgnoreProperties({"following"})
+    @JsonIgnoreProperties({"user"})
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @OneToMany(mappedBy = "following")
+    @OneToMany(mappedBy = "user")
     private List<Following> followings = new ArrayList<Following>();
     
     @JsonIgnore

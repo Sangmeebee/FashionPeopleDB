@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -57,20 +59,12 @@ public class SigninController {
 		}
 	}
 
+	@Transactional
 	@DeleteMapping("/{id}")
 	public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") String id) {
 		try {
-			Optional<FUser> fusers = fUserrepository.findById(id);
-			if(fusers.isPresent()) {
-				List<Follower> followers = fusers.get().getFollowers();
-				List<Following> followings = fusers.get().getFollowings();
-				for(Follower follower : followers) {
-					followerRepository.deleteById(follower.getId());
-				}
-				for(Following following : followings) {
-					followerRepository.deleteById(following.getId());
-				}
-			}
+			followingRepository.deleteByFollowingId(id);
+			followerRepository.deleteByFollowerId(id);
 			fUserrepository.deleteById(id);
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		} catch (Exception e) {

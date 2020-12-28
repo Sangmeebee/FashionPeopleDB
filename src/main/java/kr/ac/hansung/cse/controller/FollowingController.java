@@ -1,5 +1,6 @@
 package kr.ac.hansung.cse.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,14 +14,12 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.ac.hansung.cse.model.FUser;
 import kr.ac.hansung.cse.model.Follower;
 import kr.ac.hansung.cse.model.Following;
-import kr.ac.hansung.cse.model.RankImage;
 import kr.ac.hansung.cse.repo.FUserRepository;
 import kr.ac.hansung.cse.repo.FollowerRepository;
 import kr.ac.hansung.cse.repo.FollowingRepository;
@@ -38,11 +37,15 @@ public class FollowingController {
 
 	
 	@GetMapping("/{userId}")
-	public ResponseEntity<List<Following>> getFollowing(@PathVariable("userId") String userId) {
+	public ResponseEntity<List<FUser>> getFollowing(@PathVariable("userId") String userId) {
 		Optional<FUser> fUserData = fUserRepository.findById(userId);
 		FUser user = fUserData.get();
 		List<Following> followingData = user.getFollowings();
-		return new ResponseEntity<>(followingData, HttpStatus.OK);
+		List<FUser> users = new ArrayList<FUser>();
+		for(Following following : followingData) {
+			users.add(fUserRepository.findById(following.getFollowingId()).get());
+		}
+		return new ResponseEntity<>(users, HttpStatus.OK);
 	}
 	
 	@GetMapping("/{userId}/{customId}")
@@ -52,7 +55,7 @@ public class FollowingController {
 		boolean isFollowing = false;
 		List<Following> followingData = user.getFollowings();
 		for(Following following : followingData) {
-			if(following.getFollowing().getId().equals(customId)) {
+			if(following.getFollowingId().equals(customId)) {
 				isFollowing = true;
 			}
 		}
@@ -66,13 +69,13 @@ public class FollowingController {
 		Map<String, Boolean> map = new HashMap<>();
 		List<Following> customFollowings = custom.getFollowings();
 		for(Following cFollowing : customFollowings) {
-			map.put(cFollowing.getFollowing().getId(), false);
+			map.put(cFollowing.getFollowingId(), false);
 		}
 		List<Following> userFollowings = user.getFollowings();
 		Set<String> keys = map.keySet();
 		for(Following uFollowing : userFollowings) {
 			for (String fid : keys) {
-				if(fid.equals(uFollowing.getFollowing().getId())) {
+				if(fid.equals(uFollowing.getFollowingId())) {
 					map.put(fid, true);
 				}
 			}
@@ -88,13 +91,13 @@ public class FollowingController {
 		Map<String, Boolean> map = new HashMap<>();
 		List<Follower> customFollowers = custom.getFollowers();
 		for(Follower cFollower : customFollowers) {
-			map.put(cFollower.getFollower().getId(), false);
+			map.put(cFollower.getFollowerId(), false);
 		}
 		List<Following> userFollowings = user.getFollowings();
 		Set<String> keys = map.keySet();
 		for(Following uFollowing : userFollowings) {
 			for (String fid : keys) {
-				if(fid.equals(uFollowing.getFollowing().getId())) {
+				if(fid.equals(uFollowing.getFollowingId())) {
 					map.put(fid, true);
 				}
 			}
@@ -104,24 +107,23 @@ public class FollowingController {
 	}
 	
 	@PutMapping("/{userId}/{followingId}")
-	public ResponseEntity<Following> updateFollowing(@PathVariable("userId") String userId,
+	public ResponseEntity<HttpStatus> updateFollowing(@PathVariable("userId") String userId,
 			@PathVariable("followingId") String followingId) {
 		Optional<FUser> fUserData = fUserRepository.findById(userId);
 		Optional<FUser> followingData = fUserRepository.findById(followingId);
 		FUser following = followingData.get();
 		FUser user = fUserData.get();
 		// 나의 following에 following 추가
-		Following _following = new Following(following);
+		Following _following = new Following(user, followingId);
 		// following의 follower에 user 추가
-		//
-		List<Follower> followers = user.getFollowers();
-		List<Follower> ffollowers = following.getFollowers();
+		List<Follower> followers = followerRepository.findByUser(user);
+		List<Follower> ffollowers = followerRepository.findByUser(following);
 		boolean isFollowing = false;
 		if (followers != null) {
 			for(Follower f : followers) {
-				if(f.getFollower().getId().equals(following.getId())) {
+				if(f.getFollowerId().equals(following.getId())) {
 					for (Follower ff: ffollowers) {
-						if(ff.getFollower().getId().equals(user.getId())) {
+						if(ff.getFollowerId().equals(user.getId())) {
 							ff.setFollowing(true);
 							followerRepository.save(ff);
 						}
@@ -134,9 +136,10 @@ public class FollowingController {
 				}
 			}
 		}
-		Follower _follower = new Follower(user, isFollowing);
+		Follower _follower = new Follower(following, userId, isFollowing);
 		followerRepository.save(_follower);
-		return new ResponseEntity<>(followingRepository.save(_following), HttpStatus.OK);
+		followingRepository.save(_following);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 
@@ -149,21 +152,20 @@ public class FollowingController {
 			FUser following = followingData.get();
 			FUser user = fUserData.get();
 			// 나의 following에 following 제거 
-			List<Following> _followings = user.getFollowings();
+			List<Following> _followings = followingRepository.findByUser(user);
 			for(Following _following : _followings) {
-				if(_following.getFollowing().getId().equals(followingId)) {
+				if(_following.getFollowingId().equals(followingId)) {
 					followingRepository.delete(_following);
-					
 					fUserRepository.save(user);
 					break;
 				}
 			}
 
 			// following의 follower에 user 제거	
-			List<Follower> followers = user.getFollowers();
-			List<Follower> ffollowers = following.getFollowers();
+			List<Follower> followers = followerRepository.findByUser(user);
+			List<Follower> ffollowers = followerRepository.findByUser(following);
 			for(Follower f : followers) {
-				if(f.getFollower().getId().equals(followingId)) {
+				if(f.getFollowerId().equals(followingId)) {
 					f.setFollowing(false);
 					followerRepository.save(f);
 					break;
@@ -171,7 +173,7 @@ public class FollowingController {
 			}
 			
 			for (Follower ff : ffollowers) {
-				if(ff.getFollower().getId().equals(userId)) {
+				if(ff.getFollowerId().equals(userId)) {
 					followerRepository.delete(ff);
 					
 					fUserRepository.save(following);

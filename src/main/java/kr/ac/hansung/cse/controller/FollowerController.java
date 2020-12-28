@@ -1,5 +1,6 @@
 package kr.ac.hansung.cse.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,11 +29,14 @@ public class FollowerController {
 	FollowerRepository followerRepository;
 
 	@GetMapping("/{userId}")
-	public ResponseEntity<List<Follower>> getFollower(@PathVariable("userId") String userId) {
+	public ResponseEntity<List<FUser>> getFollower(@PathVariable("userId") String userId) {
 		Optional<FUser> fUserData = fUserRepository.findById(userId);
 		FUser user = fUserData.get();
 		List<Follower> followerData = user.getFollowers();
-
-		return new ResponseEntity<>(followerData, HttpStatus.OK);
+		List<FUser> users = new ArrayList<FUser>();
+		for(Follower follower : followerData) {
+			users.add(fUserRepository.findById(follower.getFollowerId()).get());
+		}
+		return new ResponseEntity<>(users, HttpStatus.OK);
 	}
 }
