@@ -19,9 +19,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.ac.hansung.cse.model.FUser;
+import kr.ac.hansung.cse.model.FeedImageEvaluation;
 import kr.ac.hansung.cse.model.Follower;
 import kr.ac.hansung.cse.model.Following;
 import kr.ac.hansung.cse.repo.FUserRepository;
+import kr.ac.hansung.cse.repo.FeedImageEvaluationRepository;
 import kr.ac.hansung.cse.repo.FollowerRepository;
 import kr.ac.hansung.cse.repo.FollowingRepository;
 
@@ -35,6 +37,8 @@ public class SigninController {
 	FollowingRepository followingRepository;
 	@Autowired
 	FollowerRepository followerRepository;
+	@Autowired
+	FeedImageEvaluationRepository feedImageEvaluationRepository;
 
 	@GetMapping
 	public ResponseEntity<List<FUser>> getAllUsers() {
@@ -65,6 +69,11 @@ public class SigninController {
 		try {
 			followingRepository.deleteByFollowingId(id);
 			followerRepository.deleteByFollowerId(id);
+			List<FeedImageEvaluation> evaluations = feedImageEvaluationRepository.findByEvaluationPersonId(id);
+			for(FeedImageEvaluation evaluation : evaluations) {
+				evaluation.setEvaluationPersonId("empty_user");
+				feedImageEvaluationRepository.save(evaluation);
+			}
 			fUserrepository.deleteById(id);
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		} catch (Exception e) {

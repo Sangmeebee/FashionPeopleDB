@@ -9,4 +9,5 @@ import kr.ac.hansung.cse.model.FeedImageEvaluation;
 
 public interface FeedImageEvaluationRepository extends CrudRepository<FeedImageEvaluation, Integer> {
 	List<FeedImageEvaluation> findByImage(FeedImage image);
+	List<FeedImageEvaluation> findByEvaluationPersonId(String evaluationPersonId);
 }
