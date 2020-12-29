@@ -87,11 +87,9 @@ public class SigninController {
 
 		if (userData.isPresent()) {
 			FUser _user = userData.get();
-			_user.setId(user.getId());
 			_user.setName(user.getName());
 			_user.setIntroduce(user.getIntroduce());
 			_user.setGender(user.getGender());
-			_user.setProfileImage(user.getProfileImage());
 			return new ResponseEntity<>(fUserrepository.save(_user), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
