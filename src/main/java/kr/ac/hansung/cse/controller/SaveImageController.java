@@ -1,5 +1,7 @@
 package kr.ac.hansung.cse.controller;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,26 +26,35 @@ import kr.ac.hansung.cse.repo.SaveImageRepository;
 @RestController
 @RequestMapping("/saveImage")
 public class SaveImageController {
-    @Autowired
-    FUserRepository fUserRepository;
-    @Autowired
-    FeedImageRepository feedImageRepository;
-    @Autowired
-    SaveImageRepository saveImageRepository;
-    
-    @GetMapping("/{userId}")
-    public ResponseEntity<List<SaveImage>> getSaveImages(@PathVariable("userId") String userId) {
+	@Autowired
+	FUserRepository fUserRepository;
+	@Autowired
+	FeedImageRepository feedImageRepository;
+	@Autowired
+	SaveImageRepository saveImageRepository;
+
+	@GetMapping("/{userId}")
+	public ResponseEntity<List<FeedImage>> getSaveImages(@PathVariable("userId") String userId) {
 		Optional<FUser> userData = fUserRepository.findById(userId);
 		FUser user = userData.get();
 		List<SaveImage> images = saveImageRepository.findByUser(user);
-		if (images.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(images, HttpStatus.OK);
+		images.sort(new Comparator<SaveImage>() {
+			@Override
+			public int compare(SaveImage o1, SaveImage o2) {
+				return o1.getTimeStamp().compareTo(o2.getTimeStamp());
+			}
+		});
+		
+		List<FeedImage> feedImages = new ArrayList<FeedImage>();
+		for (SaveImage image : images) {
+			feedImages.add(image.getImage());
+		}
+		return new ResponseEntity<>(feedImages, HttpStatus.OK);
 	}
-    
-	@PutMapping("/{userId}/{imageName}")
-	public ResponseEntity<SaveImage> updateSaveImage(@PathVariable("userId") String userId, @PathVariable("imageName") String imageName) {
+
+	@PostMapping("/{userId}/{imageName}")
+	public ResponseEntity<SaveImage> saveSaveImage(@PathVariable("userId") String userId,
+			@PathVariable("imageName") String imageName) {
 		Optional<FUser> fUserData = fUserRepository.findById(userId);
 		FUser user = fUserData.get();
 		Optional<FeedImage> feedImageData = feedImageRepository.findById(imageName);

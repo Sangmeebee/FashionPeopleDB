@@ -1,6 +1,7 @@
 package kr.ac.hansung.cse.model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +44,9 @@ public class SaveImage implements Serializable {
 	@Column(name = "id")
 	private int id;
 	
+    @Column(name = "timeStamp")
+    private LocalDateTime timeStamp;
+	
 	@OneToOne
 	@JoinColumn(name = "image_name")
 	private FeedImage image;
@@ -53,6 +57,7 @@ public class SaveImage implements Serializable {
     private FUser user;
 
     public SaveImage(FUser user, FeedImage image) {
+        this.timeStamp = LocalDateTime.now();
     	this.user = user;
         this.image = image;
     }
