@@ -44,7 +44,7 @@ public class SaveImageController {
 				return o1.getTimeStamp().compareTo(o2.getTimeStamp());
 			}
 		});
-		
+
 		List<FeedImage> feedImages = new ArrayList<FeedImage>();
 		for (SaveImage image : images) {
 			feedImages.add(image.getImage());
@@ -53,7 +53,7 @@ public class SaveImageController {
 	}
 
 	@PostMapping("/{userId}/{imageName}")
-	public ResponseEntity<SaveImage> saveSaveImage(@PathVariable("userId") String userId,
+	public ResponseEntity<SaveImage> postSaveImage(@PathVariable("userId") String userId,
 			@PathVariable("imageName") String imageName) {
 		Optional<FUser> fUserData = fUserRepository.findById(userId);
 		FUser user = fUserData.get();
