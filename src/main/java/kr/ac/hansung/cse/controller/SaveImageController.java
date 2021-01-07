@@ -2,7 +2,9 @@ package kr.ac.hansung.cse.controller;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -53,6 +56,29 @@ public class SaveImageController {
 		return new ResponseEntity<>(feedImages, HttpStatus.OK);
 	}
 
+	@GetMapping("/isSaved/{userId}")
+	public ResponseEntity<Map<String, Boolean>> getIsSaved(@PathVariable("userId") String userId,
+			@RequestBody List<FeedImage> feedImages) {
+		Optional<FUser> userData = fUserRepository.findById(userId);
+		FUser user = userData.get();
+		List<SaveImage> images = saveImageRepository.findByUser(user); // null 이여서 오류 뜨는지 확인
+
+		Map<String, Boolean> map = new HashMap<>();
+		if (images != null) {
+			for (FeedImage image : feedImages) {
+				boolean isExist = false;
+				for (SaveImage saveImage : images) {
+					if(image.getImageName().equals(saveImage.getImage().getImageName())) {
+						isExist = true;
+						break;
+					}
+				}
+				map.put(image.getImageName(), isExist);
+			}
+		}
+		return new ResponseEntity<>(map, HttpStatus.OK);
+	}
+
 	@PostMapping("/{userId}/{imageName}")
 	public ResponseEntity<SaveImage> postSaveImage(@PathVariable("userId") String userId,
 			@PathVariable("imageName") String imageName) {
@@ -63,18 +89,18 @@ public class SaveImageController {
 		SaveImage saveImage = new SaveImage(user, image);
 		return new ResponseEntity<>(saveImageRepository.save(saveImage), HttpStatus.OK);
 	}
-	
+
 	@DeleteMapping("/{userId}/{imageName}")
 	public ResponseEntity<HttpStatus> deleteSaveImage(@PathVariable("userId") String userId,
 			@PathVariable("imageName") String imageName) {
 		Optional<FUser> fUserData = fUserRepository.findById(userId);
 		FUser user = fUserData.get();
 		List<SaveImage> saveImages = saveImageRepository.findByUser(user);
-		for(SaveImage saveImage : saveImages) {
-			if(saveImage.getImage().getImageName().equals(imageName)) {
+		for (SaveImage saveImage : saveImages) {
+			if (saveImage.getImage().getImageName().equals(imageName)) {
 				saveImageRepository.delete(saveImage);
 				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-				
+
 			}
 		}
 		return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
