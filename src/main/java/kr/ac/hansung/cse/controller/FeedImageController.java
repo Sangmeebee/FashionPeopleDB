@@ -102,6 +102,14 @@ public class FeedImageController {
 					_images.add(image);
 				}
 			}
+			_images.sort(new Comparator<FeedImage>() {
+
+				@Override
+				public int compare(FeedImage o1, FeedImage o2) {
+					return o1.getTimeStamp().compareTo(o2.getTimeStamp());
+				}
+
+			});
 			return new ResponseEntity<>(_images, HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
