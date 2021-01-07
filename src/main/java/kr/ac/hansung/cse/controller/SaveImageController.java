@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -61,5 +62,21 @@ public class SaveImageController {
 		FeedImage image = feedImageData.get();
 		SaveImage saveImage = new SaveImage(user, image);
 		return new ResponseEntity<>(saveImageRepository.save(saveImage), HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/{userId}/{imageName}")
+	public ResponseEntity<HttpStatus> deleteSaveImage(@PathVariable("userId") String userId,
+			@PathVariable("imageName") String imageName) {
+		Optional<FUser> fUserData = fUserRepository.findById(userId);
+		FUser user = fUserData.get();
+		List<SaveImage> saveImages = saveImageRepository.findByUser(user);
+		for(SaveImage saveImage : saveImages) {
+			if(saveImage.getImage().getImageName().equals(imageName)) {
+				saveImageRepository.delete(saveImage);
+				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+				
+			}
+		}
+		return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
 	}
 }
