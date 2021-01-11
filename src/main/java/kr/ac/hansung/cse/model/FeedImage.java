@@ -41,7 +41,11 @@ public class FeedImage implements Serializable {
      */
     private static final long serialVersionUID = 4225217987814035781L;
 
-    @Id
+	@Id
+	@GeneratedValue
+	@Column(name = "id")
+	private int id;
+    
     @Column(name = "image_name")
     private String imageName;
 

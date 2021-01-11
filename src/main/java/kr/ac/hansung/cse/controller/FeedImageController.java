@@ -62,7 +62,7 @@ public class FeedImageController {
 
 	@GetMapping("/imageName/{imageName}")
 	public ResponseEntity<FeedImage> getFeedImageByName(@PathVariable("imageName") String imageName) {
-		Optional<FeedImage> feedImageData = feedImageRepository.findById(imageName);
+		Optional<FeedImage> feedImageData = feedImageRepository.findByImageName(imageName);
 		if (feedImageData.isPresent()) {
 			FeedImage feedImage = feedImageData.get();
 			return new ResponseEntity<>(feedImage, HttpStatus.OK);
@@ -77,7 +77,7 @@ public class FeedImageController {
 		Optional<FUser> userData = fUserrepository.findById(userId);
 		FUser user = userData.get();
 		List<FeedImage> feedImageData = feedImageRepository.findByUser(user);
-		FeedImage feedImage = feedImageData.get(feedImageData.size()-1);
+		FeedImage feedImage = feedImageData.get(feedImageData.size() - 1);
 		return new ResponseEntity<>(feedImage, HttpStatus.OK);
 
 	}
@@ -159,6 +159,60 @@ public class FeedImageController {
 		} else {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
+
+	}
+
+	@GetMapping("/{category}/{brandName}")
+	public ResponseEntity<List<FeedImage>> getBrandNames(@PathVariable("category") String category,
+			@PathVariable("brandName") String brandName) {
+		List<FeedImage> feedImages = new ArrayList<>();
+		List<FeedImage> searchImages = new ArrayList<>();
+
+		feedImageRepository.findAll().forEach(feedImages::add);
+
+		switch (category) {
+		case "style":
+			for (FeedImage feedImage : feedImages) {
+				if (feedImage.getStyle().equals(brandName)) {
+					searchImages.add(feedImage);
+				}
+			}
+			break;
+		case "top":
+			for (FeedImage feedImage : feedImages) {
+				if (feedImage.getTop().equals(brandName)) {
+					searchImages.add(feedImage);
+				}
+			}
+			break;
+		case "pants":
+			for (FeedImage feedImage : feedImages) {
+				if (feedImage.getPants().equals(brandName)) {
+					searchImages.add(feedImage);
+				}
+			}
+			break;
+		case "shoes":
+			for (FeedImage feedImage : feedImages) {
+				if (feedImage.getShoes().equals(brandName)) {
+					searchImages.add(feedImage);
+				}
+			}
+			break;
+		}
+
+		searchImages.sort(new Comparator<FeedImage>() {
+
+			@Override
+			public int compare(FeedImage o1, FeedImage o2) {
+				Double a = (double) o2.getResultRating();
+				Double b = (double) o1.getResultRating();
+				return a.compareTo(b);
+			}
+
+		});
+
+		return new ResponseEntity<List<FeedImage>>(searchImages, HttpStatus.OK);
 
 	}
 }

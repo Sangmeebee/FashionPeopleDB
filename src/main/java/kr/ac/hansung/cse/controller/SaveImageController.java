@@ -58,7 +58,7 @@ public class SaveImageController {
 			@PathVariable("imageName") String imageName) {
 		Optional<FUser> fUserData = fUserRepository.findById(userId);
 		FUser user = fUserData.get();
-		Optional<FeedImage> feedImageData = feedImageRepository.findById(imageName);
+		Optional<FeedImage> feedImageData = feedImageRepository.findByImageName(imageName);
 		FeedImage image = feedImageData.get();
 		SaveImage saveImage = new SaveImage(user, image);
 		return new ResponseEntity<>(saveImageRepository.save(saveImage), HttpStatus.OK);

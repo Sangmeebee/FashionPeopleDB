@@ -36,7 +36,7 @@ public class FeedImageCommentController {
 	@PutMapping("/{userId}/{imageName}")
 	public ResponseEntity<FeedImageComment> updateImageComment(@PathVariable("userId") String userId,
 			@PathVariable("imageName") String imageName, @RequestBody FeedImageComment comment) {
-		Optional<FeedImage> feedImageData = feedImageRepository.findById(imageName);
+		Optional<FeedImage> feedImageData = feedImageRepository.findByImageName(imageName);
 		FeedImage image = feedImageData.get();
 		Optional<FUser> fUserData = fUserRepository.findById(userId);
 		FUser user = fUserData.get();
@@ -48,7 +48,7 @@ public class FeedImageCommentController {
 
 	@GetMapping("/{imageName}")
 	public ResponseEntity<List<FeedImageComment>> getImageComment(@PathVariable("imageName") String imageName) {
-		Optional<FeedImage> feedImageData = feedImageRepository.findById(imageName);
+		Optional<FeedImage> feedImageData = feedImageRepository.findByImageName(imageName);
 		FeedImage image = feedImageData.get();
 		List<FeedImageComment> commentData = feedImageCommentRepository.findByImage(image);
 

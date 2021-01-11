@@ -36,7 +36,7 @@ public class FeedImageEvaluationController {
 	@PutMapping("/{imageName}")
 	public ResponseEntity<FeedImageEvaluation> updateImageEvaluation(@PathVariable("imageName") String imageName,
 			@RequestBody FeedImageEvaluation evaluation) {
-		Optional<FeedImage> feedImageData = feedImageRepository.findById(imageName);
+		Optional<FeedImage> feedImageData = feedImageRepository.findByImageName(imageName);
 		FeedImage image = feedImageData.get();
 		if (image.getEvaluations().size() == 3) {
 			return new ResponseEntity<>(null, HttpStatus.EXPECTATION_FAILED);
@@ -65,7 +65,7 @@ public class FeedImageEvaluationController {
 
 	@GetMapping("/{imageName}")
 	public ResponseEntity<List<FeedImageEvaluation>> getImageEvaluation(@PathVariable("imageName") String imageName) {
-		Optional<FeedImage> feedImageData = feedImageRepository.findById(imageName);
+		Optional<FeedImage> feedImageData = feedImageRepository.findByImageName(imageName);
 		FeedImage image = feedImageData.get();
 		List<FeedImageEvaluation> evaluationData = feedImageEvaluationRepository.findByImage(image);
 
