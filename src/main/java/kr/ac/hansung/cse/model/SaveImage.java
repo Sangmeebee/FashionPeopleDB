@@ -47,6 +47,7 @@ public class SaveImage implements Serializable {
     @Column(name = "timeStamp")
     private LocalDateTime timeStamp;
 	
+    @JsonIgnoreProperties({"saveImage"})
 	@OneToOne
 	@JoinColumn(name = "image_name")
 	private FeedImage image;
