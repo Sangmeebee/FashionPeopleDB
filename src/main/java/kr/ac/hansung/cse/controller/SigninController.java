@@ -90,21 +90,19 @@ public class SigninController {
 				saveImageRepository.deleteByImage(feedImage);
 				Set<String> brandSet = new HashSet<String>();
 				String style = feedImage.getStyle();
-				System.out.println(style + "hisssssssssssssssssssssssssssssssssssssssssssss");
 				String topBrand = feedImage.getTop();
 				String pantsBrand = feedImage.getPants();
 				String shoesBrand = feedImage.getShoes();
-				if (topBrand != null && !topBrand.isBlank()) {
-					System.out.println("hisssssssssssssssssssssssssssssssssssssssssssss");
+				if (!topBrand.isEmpty()) {
 					brandSet.add(topBrand);
 				}
-				if (pantsBrand != null && !pantsBrand.isBlank()) {
+				if (!pantsBrand.isEmpty()) {
 					brandSet.add(pantsBrand);
 				}
-				if (shoesBrand != null && !shoesBrand.isBlank()) {
+				if (!shoesBrand.isEmpty()) {
 					brandSet.add(shoesBrand);
 				}
-				if (style != null && !style.isBlank()) {
+				if (!style.isEmpty()) {
 					Style st = styleRepository.findById(style).get();
 					st.setPostNum(st.getPostNum() - 1);
 					styleRepository.save(st);
