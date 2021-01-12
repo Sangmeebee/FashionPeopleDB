@@ -19,13 +19,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.ac.hansung.cse.model.FUser;
+import kr.ac.hansung.cse.model.FeedImage;
 import kr.ac.hansung.cse.model.FeedImageEvaluation;
 import kr.ac.hansung.cse.model.Follower;
 import kr.ac.hansung.cse.model.Following;
 import kr.ac.hansung.cse.repo.FUserRepository;
 import kr.ac.hansung.cse.repo.FeedImageEvaluationRepository;
+import kr.ac.hansung.cse.repo.FeedImageRepository;
 import kr.ac.hansung.cse.repo.FollowerRepository;
 import kr.ac.hansung.cse.repo.FollowingRepository;
+import kr.ac.hansung.cse.repo.SaveImageRepository;
 
 @RestController
 @RequestMapping("/users")
@@ -39,6 +42,10 @@ public class SigninController {
 	FollowerRepository followerRepository;
 	@Autowired
 	FeedImageEvaluationRepository feedImageEvaluationRepository;
+	@Autowired
+	FeedImageRepository feedImageRepository;
+	@Autowired
+	SaveImageRepository saveImageRepository;
 
 	@GetMapping
 	public ResponseEntity<List<FUser>> getAllUsers() {
@@ -67,6 +74,11 @@ public class SigninController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") String id) {
 		try {
+			
+			List<FeedImage> feedImages = feedImageRepository.findByUser(fUserrepository.findById(id).get());
+			for(FeedImage feedImage : feedImages) {
+				saveImageRepository.deleteByImage(feedImage);
+			}
 			followingRepository.deleteByFollowingId(id);
 			followerRepository.deleteByFollowerId(id);
 			List<FeedImageEvaluation> evaluations = feedImageEvaluationRepository.findByEvaluationPersonId(id);
