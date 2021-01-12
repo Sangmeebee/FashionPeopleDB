@@ -1,8 +1,10 @@
 package kr.ac.hansung.cse.controller;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -18,22 +20,26 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import kr.ac.hansung.cse.model.Brand;
 import kr.ac.hansung.cse.model.FUser;
 import kr.ac.hansung.cse.model.FeedImage;
 import kr.ac.hansung.cse.model.FeedImageEvaluation;
 import kr.ac.hansung.cse.model.Follower;
 import kr.ac.hansung.cse.model.Following;
+import kr.ac.hansung.cse.model.Style;
+import kr.ac.hansung.cse.repo.BrandRepository;
 import kr.ac.hansung.cse.repo.FUserRepository;
 import kr.ac.hansung.cse.repo.FeedImageEvaluationRepository;
 import kr.ac.hansung.cse.repo.FeedImageRepository;
 import kr.ac.hansung.cse.repo.FollowerRepository;
 import kr.ac.hansung.cse.repo.FollowingRepository;
 import kr.ac.hansung.cse.repo.SaveImageRepository;
+import kr.ac.hansung.cse.repo.StyleRepository;
 
 @RestController
 @RequestMapping("/users")
 public class SigninController {
-	
+
 	@Autowired
 	FUserRepository fUserrepository;
 	@Autowired
@@ -46,6 +52,10 @@ public class SigninController {
 	FeedImageRepository feedImageRepository;
 	@Autowired
 	SaveImageRepository saveImageRepository;
+	@Autowired
+	BrandRepository brandRepository;
+	@Autowired
+	StyleRepository styleRepository;
 
 	@GetMapping
 	public ResponseEntity<List<FUser>> getAllUsers() {
@@ -74,21 +84,50 @@ public class SigninController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") String id) {
 		try {
-			
+
 			List<FeedImage> feedImages = feedImageRepository.findByUser(fUserrepository.findById(id).get());
-			for(FeedImage feedImage : feedImages) {
+			for (FeedImage feedImage : feedImages) {
 				saveImageRepository.deleteByImage(feedImage);
+				Set<String> brandSet = new HashSet<String>();
+				String style = feedImage.getStyle();
+				System.out.println(style + "hisssssssssssssssssssssssssssssssssssssssssssss");
+				String topBrand = feedImage.getTop();
+				String pantsBrand = feedImage.getPants();
+				String shoesBrand = feedImage.getShoes();
+				if (topBrand != null && !topBrand.isBlank()) {
+					System.out.println("hisssssssssssssssssssssssssssssssssssssssssssss");
+					brandSet.add(topBrand);
+				}
+				if (pantsBrand != null && !pantsBrand.isBlank()) {
+					brandSet.add(pantsBrand);
+				}
+				if (shoesBrand != null && !shoesBrand.isBlank()) {
+					brandSet.add(shoesBrand);
+				}
+				if (style != null && !style.isBlank()) {
+					Style st = styleRepository.findById(style).get();
+					st.setPostNum(st.getPostNum() - 1);
+					styleRepository.save(st);
+				}
+				if (!brandSet.isEmpty()) {
+					for (String brand : brandSet) {
+						Brand br = brandRepository.findById(brand).get();
+						br.setPostNum(br.getPostNum() - 1);
+						brandRepository.save(br);
+					}
+				}
 			}
 			followingRepository.deleteByFollowingId(id);
 			followerRepository.deleteByFollowerId(id);
 			List<FeedImageEvaluation> evaluations = feedImageEvaluationRepository.findByEvaluationPersonId(id);
-			for(FeedImageEvaluation evaluation : evaluations) {
+			for (FeedImageEvaluation evaluation : evaluations) {
 				evaluation.setEvaluationPersonId("empty_user");
 				feedImageEvaluationRepository.save(evaluation);
 			}
 			fUserrepository.deleteById(id);
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		} catch (Exception e) {
+			System.out.println(e.getMessage());
 			return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
 		}
 	}
@@ -112,12 +151,12 @@ public class SigninController {
 	@PostMapping
 	public ResponseEntity<FUser> postUser(@RequestBody FUser user) {
 		try {
-			FUser _user = fUserrepository.save(new FUser(user.getId(), user.getName(), user.getIntroduce(), user.getGender(), user.getProfileImage(), user.isEvaluateNow()));
+			FUser _user = fUserrepository.save(new FUser(user.getId(), user.getName(), user.getIntroduce(),
+					user.getGender(), user.getProfileImage(), user.isEvaluateNow()));
 			return new ResponseEntity<>(_user, HttpStatus.CREATED);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.EXPECTATION_FAILED);
 		}
 	}
-
 
 }
