@@ -3,9 +3,11 @@ package kr.ac.hansung.cse.controller;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -77,7 +79,7 @@ public class FeedImageController {
 		Optional<FUser> userData = fUserrepository.findById(userId);
 		FUser user = userData.get();
 		List<FeedImage> feedImageData = feedImageRepository.findByUser(user);
-		FeedImage feedImage = feedImageData.get(feedImageData.size()-1);
+		FeedImage feedImage = feedImageData.get(feedImageData.size() - 1);
 		return new ResponseEntity<>(feedImage, HttpStatus.OK);
 
 	}
@@ -159,6 +161,144 @@ public class FeedImageController {
 		} else {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
+
+	}
+
+	@GetMapping("/search/style/score/{query}")
+	public ResponseEntity<List<FeedImage>> getSearchScoreStyleImages(@PathVariable("query") String query) {
+		
+		Optional<List<FeedImage>> feedImages = feedImageRepository.findByStyle(query);
+		List<FeedImage> _feedImages = new ArrayList<>();
+		if(feedImages.isPresent()) {
+			List<FeedImage> images = feedImages.get();
+			for(FeedImage feedImage : images) {
+				if(feedImage.getResultTimeStamp() != null) {
+					_feedImages.add(feedImage);
+				}
+			}
+		}
+		_feedImages.sort(new Comparator<FeedImage>() {
+
+			@Override
+			public int compare(FeedImage o1, FeedImage o2) {
+				Float f2 = (float)o2.getResultRating();
+				Float f1 = (float)o1.getResultRating();
+				return f2.compareTo(f1);
+			}
+
+		});
+
+		return new ResponseEntity<List<FeedImage>>(_feedImages, HttpStatus.OK);
+	}
+	
+	@GetMapping("/search/style/recent/{query}")
+	public ResponseEntity<List<FeedImage>> getSearchRecentStyleImages(@PathVariable("query") String query) {
+		
+		Optional<List<FeedImage>> feedImages = feedImageRepository.findByStyle(query);
+		List<FeedImage> _feedImages = new ArrayList<>();
+		if(feedImages.isPresent()) {
+			List<FeedImage> images = feedImages.get();
+			for(FeedImage feedImage : images) {
+				if(feedImage.getResultTimeStamp() != null) {
+					_feedImages.add(feedImage);
+				}
+			}
+		}
+		_feedImages.sort(new Comparator<FeedImage>() {
+
+			@Override
+			public int compare(FeedImage o1, FeedImage o2) {
+				return o2.getTimeStamp().compareTo(o1.getTimeStamp());
+			}
+
+		});
+
+		return new ResponseEntity<List<FeedImage>>(_feedImages, HttpStatus.OK);
+	}
+	
+	@GetMapping("/search/brand/score/{query}")
+	public ResponseEntity<List<FeedImage>> getSearchScoreBrandImages(@PathVariable("query") String query) {
+		
+		List<FeedImage> _feedImages = new ArrayList<>();
+		List<FeedImage> feedImages = new ArrayList<>();
+		feedImageRepository.findAll().forEach(_feedImages::add);;
+
+		for(FeedImage feedImage : _feedImages) {
+			Set<String> brandSet = new HashSet<String>();
+			String top = feedImage.getTop();
+			String pants = feedImage.getPants();
+			String shoes = feedImage.getShoes();
+			if (!top.isEmpty()) {
+				brandSet.add(top);
+			}
+			if (!pants.isEmpty()) {
+				brandSet.add(pants);
+			}
+			if (!shoes.isEmpty()) {
+				brandSet.add(shoes);
+			}
+			
+			for(String brand : brandSet) {
+				if(query.equals(brand)) {
+					feedImages.add(feedImage);
+				}
+			}
+		}
+		feedImages.sort(new Comparator<FeedImage>() {
+
+			@Override
+			public int compare(FeedImage o1, FeedImage o2) {
+				Float f2 = (float)o2.getResultRating();
+				Float f1 = (float)o1.getResultRating();
+				return f2.compareTo(f1);
+			}
+
+		});
+
+		return new ResponseEntity<List<FeedImage>>(feedImages, HttpStatus.OK);
+
+	}
+	
+	@GetMapping("/search/brand/recent/{query}")
+	public ResponseEntity<List<FeedImage>> getSearchRecentBrandImages(@PathVariable("query") String query) {
+		
+		
+
+		List<FeedImage> _feedImages = new ArrayList<>();
+		List<FeedImage> feedImages = new ArrayList<>();
+		feedImageRepository.findAll().forEach(_feedImages::add);;
+
+		for(FeedImage feedImage : _feedImages) {
+			Set<String> brandSet = new HashSet<String>();
+			String top = feedImage.getTop();
+			String pants = feedImage.getPants();
+			String shoes = feedImage.getShoes();
+			if (!top.isEmpty()) {
+				brandSet.add(top);
+			}
+			if (!pants.isEmpty()) {
+				brandSet.add(pants);
+			}
+			if (!shoes.isEmpty()) {
+				brandSet.add(shoes);
+			}
+			
+			for(String brand : brandSet) {
+				if(query.equals(brand)) {
+					feedImages.add(feedImage);
+				}
+			}
+		}
+		feedImages.sort(new Comparator<FeedImage>() {
+
+			@Override
+			public int compare(FeedImage o1, FeedImage o2) {
+				return o2.getTimeStamp().compareTo(o1.getTimeStamp());
+			}
+
+		});
+
+		return new ResponseEntity<List<FeedImage>>(feedImages, HttpStatus.OK);
 
 	}
 }
