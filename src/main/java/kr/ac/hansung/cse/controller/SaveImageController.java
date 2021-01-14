@@ -42,7 +42,7 @@ public class SaveImageController {
 		images.sort(new Comparator<SaveImage>() {
 			@Override
 			public int compare(SaveImage o1, SaveImage o2) {
-				return o1.getTimeStamp().compareTo(o2.getTimeStamp());
+				return o2.getTimeStamp().compareTo(o1.getTimeStamp());
 			}
 		});
 
