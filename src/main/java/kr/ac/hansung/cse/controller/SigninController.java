@@ -69,6 +69,19 @@ public class SigninController {
 		}
 	}
 
+	@GetMapping("/isEigenvalue/{nickName}")
+	public ResponseEntity<Boolean> getIsEigenvalue(@PathVariable("nickName") String nickName) {
+		List<FUser> users = new ArrayList<>();
+		fUserrepository.findAll().forEach(users::add);
+		Boolean isExist = false;
+		for(FUser user : users) {
+			if(user.getName().equals(nickName)) {
+				isExist = true;
+			}
+		}
+		return new ResponseEntity<>(isExist, HttpStatus.OK);
+	}
+
 	@GetMapping("/{id}")
 	public ResponseEntity<FUser> getUserById(@PathVariable("id") String id) {
 		Optional<FUser> customerData = fUserrepository.findById(id);
