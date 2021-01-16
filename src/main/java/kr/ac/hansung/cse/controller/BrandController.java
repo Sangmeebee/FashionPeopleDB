@@ -84,7 +84,9 @@ public class BrandController {
 
 			@Override
 			public int compare(Brand o1, Brand o2) {
-				return o1.getBrandName().compareTo(o2.getBrandName());
+				Integer num1 = o2.getPostNum();
+				Integer num2 = o1.getPostNum();
+				return num1.compareTo(num2);
 			}
 		});
 
