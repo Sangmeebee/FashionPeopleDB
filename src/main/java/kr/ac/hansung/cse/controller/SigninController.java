@@ -98,8 +98,11 @@ public class SigninController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") String id) {
 		try {
-
-			List<FeedImage> feedImages = feedImageRepository.findByUser(fUserrepository.findById(id).get());
+			List<FeedImage> feedImages = new ArrayList<>();
+			FUser user = fUserrepository.findById(id).get();
+			if (!feedImageRepository.findByUser(user).isEmpty()) {
+				feedImages = feedImageRepository.findByUser(user);
+			}
 			for (FeedImage feedImage : feedImages) {
 				saveImageRepository.deleteByImage(feedImage);
 				Set<String> brandSet = new HashSet<String>();
@@ -131,7 +134,10 @@ public class SigninController {
 			}
 			followingRepository.deleteByFollowingId(id);
 			followerRepository.deleteByFollowerId(id);
-			List<FeedImageEvaluation> evaluations = feedImageEvaluationRepository.findByEvaluationPersonId(id);
+			List<FeedImageEvaluation> evaluations = new ArrayList<>();
+			if(!feedImageEvaluationRepository.findByEvaluationPersonId(id).isEmpty()) {
+				evaluations = feedImageEvaluationRepository.findByEvaluationPersonId(id);
+			}
 			for (FeedImageEvaluation evaluation : evaluations) {
 				evaluation.setEvaluationPersonId("empty_user");
 				feedImageEvaluationRepository.save(evaluation);
@@ -181,7 +187,7 @@ public class SigninController {
 				searchUsers.add(user);
 			}
 		}
-		
+
 		searchUsers.sort(new Comparator<FUser>() {
 
 			@Override
