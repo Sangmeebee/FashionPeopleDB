@@ -1,6 +1,7 @@
 package kr.ac.hansung.cse.controller;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -74,8 +75,8 @@ public class SigninController {
 		List<FUser> users = new ArrayList<>();
 		fUserrepository.findAll().forEach(users::add);
 		Boolean isExist = false;
-		for(FUser user : users) {
-			if(user.getName().equals(nickName)) {
+		for (FUser user : users) {
+			if (user.getName().equals(nickName)) {
 				isExist = true;
 			}
 		}
@@ -168,6 +169,29 @@ public class SigninController {
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.EXPECTATION_FAILED);
 		}
+	}
+
+	@GetMapping("/search/{nickName}")
+	public ResponseEntity<List<FUser>> getSearchUser(@PathVariable("nickName") String nickName) {
+		List<FUser> users = new ArrayList<>();
+		fUserrepository.findAll().forEach(users::add);
+		List<FUser> searchUsers = new ArrayList<>();
+		for (FUser user : users) {
+			if (user.getName().contains((CharSequence) nickName)) {
+				searchUsers.add(user);
+			}
+		}
+		
+		searchUsers.sort(new Comparator<FUser>() {
+
+			@Override
+			public int compare(FUser o1, FUser o2) {
+				Integer num1 = o2.getFollowers().size();
+				Integer num2 = o1.getFollowers().size();
+				return num1.compareTo(num2);
+			}
+		});
+		return new ResponseEntity<>(searchUsers, HttpStatus.OK);
 	}
 
 }
