@@ -10,7 +10,7 @@ import kr.ac.hansung.cse.model.FUser;
 import kr.ac.hansung.cse.model.FeedImage;
 
 public interface FeedImageRepository extends CrudRepository<FeedImage, String> {
-	List<FeedImage> findByUser(FUser user);
+	Optional<List<FeedImage>> findByUser(FUser user);
 	Optional<List<FeedImage>> findByStyle(String style);
 	Optional<List<FeedImage>> findByTop(String top);
 	Optional<List<FeedImage>> findByPants(String pants);

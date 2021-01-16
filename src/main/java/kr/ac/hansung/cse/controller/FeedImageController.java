@@ -54,12 +54,15 @@ public class FeedImageController {
 	public ResponseEntity<List<FeedImage>> getUserImages(@PathVariable("id") String id) {
 		Optional<FUser> userData = fUserrepository.findById(id);
 		FUser user = userData.get();
-		List<FeedImage> images = feedImageRepository.findByUser(user);
-		if (images.get(images.size() - 1).isEvaluateNow() == true) {
-			images.remove(images.size() - 1);
+		Optional<List<FeedImage>> _images = feedImageRepository.findByUser(user);
+		if(_images.isPresent()) {
+			List<FeedImage> images = _images.get();
+			if (images.get(images.size() - 1).isEvaluateNow() == true) {
+				images.remove(images.size() - 1);
+			}
+			return new ResponseEntity<>(images, HttpStatus.OK);
 		}
-
-		return new ResponseEntity<>(images, HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 
 	@GetMapping("/imageName/{imageName}")
@@ -78,9 +81,14 @@ public class FeedImageController {
 	public ResponseEntity<FeedImage> getEvaluatedFeedImage(@PathVariable("userId") String userId) {
 		Optional<FUser> userData = fUserrepository.findById(userId);
 		FUser user = userData.get();
-		List<FeedImage> feedImageData = feedImageRepository.findByUser(user);
-		FeedImage feedImage = feedImageData.get(feedImageData.size() - 1);
-		return new ResponseEntity<>(feedImage, HttpStatus.OK);
+		
+		Optional<List<FeedImage>> _feedImageData = feedImageRepository.findByUser(user);
+		if(_feedImageData.isPresent()) {
+			List<FeedImage> feedImageData = _feedImageData.get();
+			FeedImage feedImage = feedImageData.get(feedImageData.size() - 1);
+			return new ResponseEntity<>(feedImage, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
 	}
 
@@ -146,7 +154,11 @@ public class FeedImageController {
 
 			for (int i = 0; i < followingList.size(); i++) {
 				FUser _user = fUserrepository.findById(followingList.get(i).getFollowingId()).get();
-				List<FeedImage> images = feedImageRepository.findByUser(_user);
+				List<FeedImage> images = new ArrayList<>();
+				Optional<List<FeedImage>> _images = feedImageRepository.findByUser(_user);
+				if(_images.isPresent()) {
+					images = _images.get();
+				}
 				feedImages.addAll(images);
 			}
 			feedImages.sort(new Comparator<FeedImage>() {

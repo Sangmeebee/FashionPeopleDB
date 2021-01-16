@@ -98,45 +98,47 @@ public class SigninController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") String id) {
 		try {
-			List<FeedImage> feedImages = new ArrayList<>();
-			FUser user = fUserrepository.findById(id).get();
-			if (!feedImageRepository.findByUser(user).isEmpty()) {
-				feedImages = feedImageRepository.findByUser(user);
-			}
-			for (FeedImage feedImage : feedImages) {
-				saveImageRepository.deleteByImage(feedImage);
-				Set<String> brandSet = new HashSet<String>();
-				String style = feedImage.getStyle();
-				String topBrand = feedImage.getTop();
-				String pantsBrand = feedImage.getPants();
-				String shoesBrand = feedImage.getShoes();
-				if (!topBrand.isEmpty()) {
-					brandSet.add(topBrand);
-				}
-				if (!pantsBrand.isEmpty()) {
-					brandSet.add(pantsBrand);
-				}
-				if (!shoesBrand.isEmpty()) {
-					brandSet.add(shoesBrand);
-				}
-				if (!style.isEmpty()) {
-					Style st = styleRepository.findById(style).get();
-					st.setPostNum(st.getPostNum() - 1);
-					styleRepository.save(st);
-				}
-				if (!brandSet.isEmpty()) {
-					for (String brand : brandSet) {
-						Brand br = brandRepository.findById(brand).get();
-						br.setPostNum(br.getPostNum() - 1);
-						brandRepository.save(br);
+
+			Optional<List<FeedImage>> _feedImages = feedImageRepository.findByUser(fUserrepository.findById(id).get());
+			if (_feedImages.isPresent()) {
+				List<FeedImage> feedImages = _feedImages.get();
+				for (FeedImage feedImage : feedImages) {
+					saveImageRepository.deleteByImage(feedImage);
+					Set<String> brandSet = new HashSet<String>();
+					String style = feedImage.getStyle();
+					String topBrand = feedImage.getTop();
+					String pantsBrand = feedImage.getPants();
+					String shoesBrand = feedImage.getShoes();
+					if (!topBrand.isEmpty()) {
+						brandSet.add(topBrand);
+					}
+					if (!pantsBrand.isEmpty()) {
+						brandSet.add(pantsBrand);
+					}
+					if (!shoesBrand.isEmpty()) {
+						brandSet.add(shoesBrand);
+					}
+					if (!style.isEmpty()) {
+						Style st = styleRepository.findById(style).get();
+						st.setPostNum(st.getPostNum() - 1);
+						styleRepository.save(st);
+					}
+					if (!brandSet.isEmpty()) {
+						for (String brand : brandSet) {
+							Brand br = brandRepository.findById(brand).get();
+							br.setPostNum(br.getPostNum() - 1);
+							brandRepository.save(br);
+						}
 					}
 				}
 			}
+
 			followingRepository.deleteByFollowingId(id);
 			followerRepository.deleteByFollowerId(id);
+			Optional<List<FeedImageEvaluation>> _evaluations = feedImageEvaluationRepository.findByEvaluationPersonId(id);
 			List<FeedImageEvaluation> evaluations = new ArrayList<>();
-			if(!feedImageEvaluationRepository.findByEvaluationPersonId(id).isEmpty()) {
-				evaluations = feedImageEvaluationRepository.findByEvaluationPersonId(id);
+			if(_evaluations.isPresent()) {
+				evaluations = _evaluations.get();
 			}
 			for (FeedImageEvaluation evaluation : evaluations) {
 				evaluation.setEvaluationPersonId("empty_user");
