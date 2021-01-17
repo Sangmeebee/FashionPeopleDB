@@ -49,6 +49,27 @@ public class BrandController {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 
 	}
+	
+	@GetMapping("/feedImage/popularStyle")
+	public ResponseEntity<List<Style>> getPopularStyle() {
+		List<Style> styles = new ArrayList<>();
+		List<Style> result = new ArrayList<>();
+		styleRepository.findAll().forEach(styles::add);
+		
+		styles.sort(new Comparator<Style>() {
+			@Override
+			public int compare(Style o1, Style o2) {
+				Integer num1 = o2.getPostNum();
+				Integer num2 = o1.getPostNum();
+				return num1.compareTo(num2);
+			}
+		});
+		
+		for(int i=0 ; i<10 ; i++) {
+			result.add(styles.get(i));
+		}
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
 
 	@PutMapping("/feedImage/style/{style}")
 	public ResponseEntity<Style> putStyle(@PathVariable("style") String style) {
@@ -90,6 +111,27 @@ public class BrandController {
 			}
 		});
 
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+	
+	@GetMapping("/feedImage/popularBrand")
+	public ResponseEntity<List<Brand>> getPopularBrand() {
+		List<Brand> brands = new ArrayList<>();
+		List<Brand> result = new ArrayList<>();
+		brandRepository.findAll().forEach(brands::add);
+		
+		brands.sort(new Comparator<Brand>() {
+			@Override
+			public int compare(Brand o1, Brand o2) {
+				Integer num1 = o2.getPostNum();
+				Integer num2 = o1.getPostNum();
+				return num1.compareTo(num2);
+			}
+		});
+		
+		for(int i=0 ; i<10 ; i++) {
+			result.add(brands.get(i));
+		}
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
