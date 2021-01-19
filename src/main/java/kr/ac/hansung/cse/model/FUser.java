@@ -62,10 +62,7 @@ public class FUser implements Serializable {
 
     @Column(name = "profile_image")
     private String profileImage;
-    
-    @Column(name = "evaluate_now")
-    private boolean evaluateNow;
-    
+
     @JsonIgnoreProperties({"user"})
     @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany(mappedBy = "user")
@@ -91,7 +88,7 @@ public class FUser implements Serializable {
     @OneToMany(mappedBy = "user")
     private List<SaveImage> saveImages = new ArrayList<SaveImage>();
 
-    public FUser(String id, String name, String introduce, String gender, Integer height, Integer weight, String profileImage, boolean evaluateNow) {
+    public FUser(String id, String name, String introduce, String gender, Integer height, Integer weight, String profileImage) {
         this.id = id;
         this.name = name;
         this.introduce = introduce;
@@ -99,7 +96,6 @@ public class FUser implements Serializable {
         this.height = height;
         this.weight = weight;
         this.profileImage = profileImage;
-        this.evaluateNow = evaluateNow;
     }
 
 }

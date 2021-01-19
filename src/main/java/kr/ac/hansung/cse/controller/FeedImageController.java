@@ -57,9 +57,6 @@ public class FeedImageController {
 		Optional<List<FeedImage>> _images = feedImageRepository.findByUser(user);
 		if(_images.isPresent()) {
 			List<FeedImage> images = _images.get();
-			if (images.get(images.size() - 1).isEvaluateNow() == true) {
-				images.remove(images.size() - 1);
-			}
 			return new ResponseEntity<>(images, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -74,21 +71,6 @@ public class FeedImageController {
 		} else {
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
-
-	}
-
-	@GetMapping("/evaluated/{userId}")
-	public ResponseEntity<FeedImage> getEvaluatedFeedImage(@PathVariable("userId") String userId) {
-		Optional<FUser> userData = fUserrepository.findById(userId);
-		FUser user = userData.get();
-		
-		Optional<List<FeedImage>> _feedImageData = feedImageRepository.findByUser(user);
-		if(_feedImageData.isPresent()) {
-			List<FeedImage> feedImageData = _feedImageData.get();
-			FeedImage feedImage = feedImageData.get(feedImageData.size() - 1);
-			return new ResponseEntity<>(feedImage, HttpStatus.OK);
-		}
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
 	}
 
@@ -133,8 +115,6 @@ public class FeedImageController {
 		FeedImage mImage = new FeedImage(image.getImageName(), image.getStyle(), image.getTop(), image.getPants(),
 				image.getShoes(), image.getRank(), image.isEvaluateNow(), image.getResultRating(), user);
 		try {
-			user.setEvaluateNow(true);
-			fUserrepository.save(user);
 			FeedImage _image = feedImageRepository.save(mImage);
 			return new ResponseEntity<>(_image, HttpStatus.CREATED);
 		} catch (Exception e) {
@@ -182,12 +162,7 @@ public class FeedImageController {
 		Optional<List<FeedImage>> feedImages = feedImageRepository.findByStyle(query);
 		List<FeedImage> _feedImages = new ArrayList<>();
 		if(feedImages.isPresent()) {
-			List<FeedImage> images = feedImages.get();
-			for(FeedImage feedImage : images) {
-				if(feedImage.getResultTimeStamp() != null) {
-					_feedImages.add(feedImage);
-				}
-			}
+			_feedImages = feedImages.get();
 		}
 		_feedImages.sort(new Comparator<FeedImage>() {
 
@@ -209,12 +184,7 @@ public class FeedImageController {
 		Optional<List<FeedImage>> feedImages = feedImageRepository.findByStyle(query);
 		List<FeedImage> _feedImages = new ArrayList<>();
 		if(feedImages.isPresent()) {
-			List<FeedImage> images = feedImages.get();
-			for(FeedImage feedImage : images) {
-				if(feedImage.getResultTimeStamp() != null) {
-					_feedImages.add(feedImage);
-				}
-			}
+			_feedImages = feedImages.get();
 		}
 		_feedImages.sort(new Comparator<FeedImage>() {
 

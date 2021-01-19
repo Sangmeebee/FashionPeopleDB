@@ -46,10 +46,6 @@ public class FeedImageEvaluationController {
 			List<FeedImageEvaluation> evaluations = image.getEvaluations();
 			evaluations.add(_evaluation);
 			if (evaluations.size() == 3) {
-				Optional<FUser> fUserData = fUserRepository.findById(image.getUser().getId());
-				FUser user = fUserData.get();
-				user.setEvaluateNow(false);
-				fUserRepository.save(user);
 				image.setEvaluateNow(false);
 				image.setResultTimeStamp(LocalDateTime.now());
 				float sum = 0;

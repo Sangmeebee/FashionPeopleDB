@@ -176,7 +176,7 @@ public class SigninController {
 		try {
 			FUser _user = fUserrepository
 					.save(new FUser(user.getId(), user.getName(), user.getIntroduce(), user.getGender(),
-							user.getHeight(), user.getWeight(), user.getProfileImage(), user.isEvaluateNow()));
+							user.getHeight(), user.getWeight(), user.getProfileImage()));
 			return new ResponseEntity<>(_user, HttpStatus.CREATED);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.EXPECTATION_FAILED);
