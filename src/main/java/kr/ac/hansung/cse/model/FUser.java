@@ -53,6 +53,12 @@ public class FUser implements Serializable {
     
     @Column(name = "gender")
     private String gender;
+    
+    @Column(name = "height")
+    private Integer height;
+    
+    @Column(name = "weight")
+    private Integer weight;
 
     @Column(name = "profile_image")
     private String profileImage;
@@ -85,11 +91,13 @@ public class FUser implements Serializable {
     @OneToMany(mappedBy = "user")
     private List<SaveImage> saveImages = new ArrayList<SaveImage>();
 
-    public FUser(String id, String name, String introduce, String gender, String profileImage, boolean evaluateNow) {
+    public FUser(String id, String name, String introduce, String gender, Integer height, Integer weight, String profileImage, boolean evaluateNow) {
         this.id = id;
         this.name = name;
         this.introduce = introduce;
         this.gender = gender;
+        this.height = height;
+        this.weight = weight;
         this.profileImage = profileImage;
         this.evaluateNow = evaluateNow;
     }

@@ -135,9 +135,10 @@ public class SigninController {
 
 			followingRepository.deleteByFollowingId(id);
 			followerRepository.deleteByFollowerId(id);
-			Optional<List<FeedImageEvaluation>> _evaluations = feedImageEvaluationRepository.findByEvaluationPersonId(id);
+			Optional<List<FeedImageEvaluation>> _evaluations = feedImageEvaluationRepository
+					.findByEvaluationPersonId(id);
 			List<FeedImageEvaluation> evaluations = new ArrayList<>();
-			if(_evaluations.isPresent()) {
+			if (_evaluations.isPresent()) {
 				evaluations = _evaluations.get();
 			}
 			for (FeedImageEvaluation evaluation : evaluations) {
@@ -161,6 +162,8 @@ public class SigninController {
 			_user.setName(user.getName());
 			_user.setIntroduce(user.getIntroduce());
 			_user.setGender(user.getGender());
+			_user.setHeight(user.getHeight());
+			_user.setWeight(user.getWeight());
 			_user.setProfileImage(user.getProfileImage());
 			return new ResponseEntity<>(fUserrepository.save(_user), HttpStatus.OK);
 		} else {
@@ -171,8 +174,9 @@ public class SigninController {
 	@PostMapping
 	public ResponseEntity<FUser> postUser(@RequestBody FUser user) {
 		try {
-			FUser _user = fUserrepository.save(new FUser(user.getId(), user.getName(), user.getIntroduce(),
-					user.getGender(), user.getProfileImage(), user.isEvaluateNow()));
+			FUser _user = fUserrepository
+					.save(new FUser(user.getId(), user.getName(), user.getIntroduce(), user.getGender(),
+							user.getHeight(), user.getWeight(), user.getProfileImage(), user.isEvaluateNow()));
 			return new ResponseEntity<>(_user, HttpStatus.CREATED);
 		} catch (Exception e) {
 			return new ResponseEntity<>(null, HttpStatus.EXPECTATION_FAILED);
