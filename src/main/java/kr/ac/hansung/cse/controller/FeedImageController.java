@@ -55,8 +55,14 @@ public class FeedImageController {
 		Optional<FUser> userData = fUserrepository.findById(id);
 		FUser user = userData.get();
 		Optional<List<FeedImage>> _images = feedImageRepository.findByUser(user);
-		if(_images.isPresent()) {
+		if (_images.isPresent()) {
 			List<FeedImage> images = _images.get();
+			images.sort(new Comparator<FeedImage>() {
+				@Override
+				public int compare(FeedImage o1, FeedImage o2) {
+					return o2.getTimeStamp().compareTo(o1.getTimeStamp());
+				}
+			});
 			return new ResponseEntity<>(images, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -136,7 +142,7 @@ public class FeedImageController {
 				FUser _user = fUserrepository.findById(followingList.get(i).getFollowingId()).get();
 				List<FeedImage> images = new ArrayList<>();
 				Optional<List<FeedImage>> _images = feedImageRepository.findByUser(_user);
-				if(_images.isPresent()) {
+				if (_images.isPresent()) {
 					images = _images.get();
 				}
 				feedImages.addAll(images);
@@ -158,18 +164,18 @@ public class FeedImageController {
 
 	@GetMapping("/search/style/score/{query}")
 	public ResponseEntity<List<FeedImage>> getSearchScoreStyleImages(@PathVariable("query") String query) {
-		
+
 		Optional<List<FeedImage>> feedImages = feedImageRepository.findByStyle(query);
 		List<FeedImage> _feedImages = new ArrayList<>();
-		if(feedImages.isPresent()) {
+		if (feedImages.isPresent()) {
 			_feedImages = feedImages.get();
 		}
 		_feedImages.sort(new Comparator<FeedImage>() {
 
 			@Override
 			public int compare(FeedImage o1, FeedImage o2) {
-				Float f2 = (float)o2.getResultRating();
-				Float f1 = (float)o1.getResultRating();
+				Float f2 = (float) o2.getResultRating();
+				Float f1 = (float) o1.getResultRating();
 				return f2.compareTo(f1);
 			}
 
@@ -177,13 +183,13 @@ public class FeedImageController {
 
 		return new ResponseEntity<List<FeedImage>>(_feedImages, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/search/style/recent/{query}")
 	public ResponseEntity<List<FeedImage>> getSearchRecentStyleImages(@PathVariable("query") String query) {
-		
+
 		Optional<List<FeedImage>> feedImages = feedImageRepository.findByStyle(query);
 		List<FeedImage> _feedImages = new ArrayList<>();
-		if(feedImages.isPresent()) {
+		if (feedImages.isPresent()) {
 			_feedImages = feedImages.get();
 		}
 		_feedImages.sort(new Comparator<FeedImage>() {
@@ -197,15 +203,16 @@ public class FeedImageController {
 
 		return new ResponseEntity<List<FeedImage>>(_feedImages, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/search/brand/score/{query}")
 	public ResponseEntity<List<FeedImage>> getSearchScoreBrandImages(@PathVariable("query") String query) {
-		
+
 		List<FeedImage> _feedImages = new ArrayList<>();
 		List<FeedImage> feedImages = new ArrayList<>();
-		feedImageRepository.findAll().forEach(_feedImages::add);;
+		feedImageRepository.findAll().forEach(_feedImages::add);
+		;
 
-		for(FeedImage feedImage : _feedImages) {
+		for (FeedImage feedImage : _feedImages) {
 			Set<String> brandSet = new HashSet<String>();
 			String top = feedImage.getTop();
 			String pants = feedImage.getPants();
@@ -219,9 +226,9 @@ public class FeedImageController {
 			if (!shoes.isEmpty()) {
 				brandSet.add(shoes);
 			}
-			
-			for(String brand : brandSet) {
-				if(query.equals(brand)) {
+
+			for (String brand : brandSet) {
+				if (query.equals(brand)) {
 					feedImages.add(feedImage);
 				}
 			}
@@ -230,8 +237,8 @@ public class FeedImageController {
 
 			@Override
 			public int compare(FeedImage o1, FeedImage o2) {
-				Float f2 = (float)o2.getResultRating();
-				Float f1 = (float)o1.getResultRating();
+				Float f2 = (float) o2.getResultRating();
+				Float f1 = (float) o1.getResultRating();
 				return f2.compareTo(f1);
 			}
 
@@ -240,17 +247,16 @@ public class FeedImageController {
 		return new ResponseEntity<List<FeedImage>>(feedImages, HttpStatus.OK);
 
 	}
-	
+
 	@GetMapping("/search/brand/recent/{query}")
 	public ResponseEntity<List<FeedImage>> getSearchRecentBrandImages(@PathVariable("query") String query) {
-		
-		
 
 		List<FeedImage> _feedImages = new ArrayList<>();
 		List<FeedImage> feedImages = new ArrayList<>();
-		feedImageRepository.findAll().forEach(_feedImages::add);;
+		feedImageRepository.findAll().forEach(_feedImages::add);
+		;
 
-		for(FeedImage feedImage : _feedImages) {
+		for (FeedImage feedImage : _feedImages) {
 			Set<String> brandSet = new HashSet<String>();
 			String top = feedImage.getTop();
 			String pants = feedImage.getPants();
@@ -264,9 +270,9 @@ public class FeedImageController {
 			if (!shoes.isEmpty()) {
 				brandSet.add(shoes);
 			}
-			
-			for(String brand : brandSet) {
-				if(query.equals(brand)) {
+
+			for (String brand : brandSet) {
+				if (query.equals(brand)) {
 					feedImages.add(feedImage);
 				}
 			}
