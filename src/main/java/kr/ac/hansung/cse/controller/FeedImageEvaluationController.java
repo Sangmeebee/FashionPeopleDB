@@ -38,14 +38,14 @@ public class FeedImageEvaluationController {
 			@RequestBody FeedImageEvaluation evaluation) {
 		Optional<FeedImage> feedImageData = feedImageRepository.findById(imageName);
 		FeedImage image = feedImageData.get();
-		if (image.getEvaluations().size() == 3) {
+		if (image.getEvaluations().size() == 5) {
 			return new ResponseEntity<>(null, HttpStatus.EXPECTATION_FAILED);
 		} else {
 			FeedImageEvaluation _evaluation = new FeedImageEvaluation(evaluation.getEvaluationPersonId(),
 					evaluation.getScore(), image);
 			List<FeedImageEvaluation> evaluations = image.getEvaluations();
 			evaluations.add(_evaluation);
-			if (evaluations.size() == 3) {
+			if (evaluations.size() == 5) {
 				image.setEvaluateNow(false);
 				image.setResultTimeStamp(LocalDateTime.now());
 				float sum = 0;
