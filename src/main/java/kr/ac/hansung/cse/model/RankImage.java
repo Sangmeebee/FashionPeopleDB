@@ -44,9 +44,13 @@ public class RankImage implements Serializable{/**
     @Column(name = "rankTimeStamp")
     private String rankTimeStamp;
     
-    public RankImage(FeedImage image, int rank, String rankTimeStamp) {
+    @Column(name = "gender")
+    private String gender;
+    
+    public RankImage(FeedImage image, int rank, String rankTimeStamp, String gender) {
         this.image = image;
         this.rank = rank;
         this.rankTimeStamp = rankTimeStamp;
+        this.gender = gender;
     }  
 }
