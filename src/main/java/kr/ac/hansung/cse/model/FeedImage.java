@@ -85,7 +85,12 @@ public class FeedImage implements Serializable {
     @JsonIgnoreProperties({"image"})
     @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToOne(mappedBy = "image", cascade = CascadeType.ALL)
-    private RankImage rankImage;
+    private ManRankImage manRankImage;
+    
+    @JsonIgnoreProperties({"image"})
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OneToOne(mappedBy = "image", cascade = CascadeType.ALL)
+    private WomanRankImage womanRankImage;
         
     @JsonIgnoreProperties({"images"})
     @ManyToOne

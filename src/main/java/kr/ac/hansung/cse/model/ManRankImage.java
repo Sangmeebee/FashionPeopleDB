@@ -1,14 +1,12 @@
 package kr.ac.hansung.cse.model;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -23,7 +21,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @NoArgsConstructor
-public class RankImage implements Serializable{/**
+public class ManRankImage implements Serializable{/**
 	 * 
 	 */
 	private static final long serialVersionUID = 4743160317787874113L;
@@ -43,14 +41,10 @@ public class RankImage implements Serializable{/**
     
     @Column(name = "rankTimeStamp")
     private String rankTimeStamp;
-    
-    @Column(name = "gender")
-    private String gender;
-    
-    public RankImage(FeedImage image, int rank, String rankTimeStamp, String gender) {
+
+    public ManRankImage(FeedImage image, int rank, String rankTimeStamp) {
         this.image = image;
         this.rank = rank;
         this.rankTimeStamp = rankTimeStamp;
-        this.gender = gender;
     }  
 }
