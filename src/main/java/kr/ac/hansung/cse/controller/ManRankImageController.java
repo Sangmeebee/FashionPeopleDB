@@ -94,7 +94,7 @@ public class ManRankImageController {
 			}
 			WeekFields weekFields = WeekFields.of(Locale.getDefault());
 			String ts = Integer.toString(nowTimeStamp.getYear()) + "년 " + Integer.toString(nowTimeStamp.getMonthValue())
-					+ "월 " + Integer.toString(nowTimeStamp.get(weekFields.weekOfMonth()) + 1) + "주차";
+					+ "월 " + Integer.toString(nowTimeStamp.get(weekFields.weekOfMonth())) + "주차";
 			ManRankImage rankImage = new ManRankImage(rankImages.get(i), i + 1, ts);
 			rankImageRepository.save(rankImage);
 		}

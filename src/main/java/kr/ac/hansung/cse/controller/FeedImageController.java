@@ -9,9 +9,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,13 +22,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import kr.ac.hansung.cse.model.Brand;
 import kr.ac.hansung.cse.model.FUser;
 import kr.ac.hansung.cse.model.FeedImage;
 import kr.ac.hansung.cse.model.FeedImageEvaluation;
 import kr.ac.hansung.cse.model.Following;
+import kr.ac.hansung.cse.model.Style;
+import kr.ac.hansung.cse.repo.BrandRepository;
 import kr.ac.hansung.cse.repo.FUserRepository;
+import kr.ac.hansung.cse.repo.FeedImageEvaluationRepository;
 import kr.ac.hansung.cse.repo.FeedImageRepository;
 import kr.ac.hansung.cse.repo.FollowingRepository;
+import kr.ac.hansung.cse.repo.SaveImageRepository;
+import kr.ac.hansung.cse.repo.StyleRepository;
 
 @RestController
 @RequestMapping("/feedImage")
@@ -37,7 +46,15 @@ public class FeedImageController {
 	FeedImageRepository feedImageRepository;
 
 	@Autowired
+	SaveImageRepository saveImageRepository;
+
+	@Autowired
 	FollowingRepository followingRepository;
+
+	@Autowired
+	BrandRepository brandRepository;
+	@Autowired
+	StyleRepository styleRepository;
 
 	@GetMapping
 	public ResponseEntity<List<FeedImage>> getAllImages() {
@@ -288,5 +305,49 @@ public class FeedImageController {
 
 		return new ResponseEntity<List<FeedImage>>(feedImages, HttpStatus.OK);
 
+	}
+	
+	@Transactional
+	@DeleteMapping("/{imageName}")
+	public ResponseEntity<HttpStatus> deleteFeedImage(@PathVariable("imageName") String imageName) {
+		try {
+
+			Optional<FeedImage> _feedImage = feedImageRepository.findById(imageName);
+			if (_feedImage.isPresent()) {
+				FeedImage feedImage = _feedImage.get();
+				saveImageRepository.deleteByImage(feedImage);
+				Set<String> brandSet = new HashSet<String>();
+				String style = feedImage.getStyle();
+				String topBrand = feedImage.getTop();
+				String pantsBrand = feedImage.getPants();
+				String shoesBrand = feedImage.getShoes();
+				if (!topBrand.isEmpty()) {
+					brandSet.add(topBrand);
+				}
+				if (!pantsBrand.isEmpty()) {
+					brandSet.add(pantsBrand);
+				}
+				if (!shoesBrand.isEmpty()) {
+					brandSet.add(shoesBrand);
+				}
+				if (!style.isEmpty()) {
+					Style st = styleRepository.findById(style).get();
+					st.setPostNum(st.getPostNum() - 1);
+					styleRepository.save(st);
+				}
+				if (!brandSet.isEmpty()) {
+					for (String brand : brandSet) {
+						Brand br = brandRepository.findById(brand).get();
+						br.setPostNum(br.getPostNum() - 1);
+						brandRepository.save(br);
+					}
+				}
+				feedImageRepository.deleteById(imageName);
+			}
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
+		}
 	}
 }
