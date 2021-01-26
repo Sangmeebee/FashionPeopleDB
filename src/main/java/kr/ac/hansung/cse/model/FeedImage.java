@@ -77,7 +77,7 @@ public class FeedImage implements Serializable {
     @OneToMany(mappedBy = "image", cascade = CascadeType.ALL)
     private List<FeedImageEvaluation> evaluations = new ArrayList<FeedImageEvaluation>();
     
-    @JsonIgnore
+    @JsonIgnoreProperties({"image"})
     @OnDelete(action = OnDeleteAction.CASCADE)
     @OneToMany(mappedBy = "image", cascade = CascadeType.ALL)
     private List<FeedImageComment> comments = new ArrayList<FeedImageComment>();
