@@ -42,7 +42,7 @@ public class FeedImageCommentController {
 		Optional<FUser> fUserData = fUserRepository.findById(userId);
 		FUser user = fUserData.get();
 		LocalDateTime currentDateTime = LocalDateTime.now();
-		FeedImageComment _comment = new FeedImageComment(comment.getContent(), currentDateTime, user, image);
+		FeedImageComment _comment = new FeedImageComment(comment.getContent(), currentDateTime, image, user);
 		return new ResponseEntity<>(feedImageCommentRepository.save(_comment), HttpStatus.OK);
 
 	}

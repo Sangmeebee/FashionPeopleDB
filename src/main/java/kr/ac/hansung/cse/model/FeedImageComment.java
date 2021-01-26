@@ -61,7 +61,7 @@ public class FeedImageComment implements Serializable {
 	@JoinColumn(name = "user_id")
 	private FUser user;
 
-	public FeedImageComment(String content, LocalDateTime currentDateTime, FUser user, FeedImage image) {
+	public FeedImageComment(String content, LocalDateTime currentDateTime, FeedImage image, FUser user) {
 		this.content = content;
 		this.currentDateTime = currentDateTime;
 		this.user = user;
