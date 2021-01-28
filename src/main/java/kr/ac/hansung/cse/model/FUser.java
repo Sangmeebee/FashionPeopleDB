@@ -64,28 +64,23 @@ public class FUser implements Serializable {
     private String profileImage;
 
     @JsonIgnoreProperties({"user"})
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Follower> followers = new ArrayList<Follower>();
   
     @JsonIgnoreProperties({"user"})
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Following> followings = new ArrayList<Following>();
     
     @JsonIgnore
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<FeedImage> images = new ArrayList<>();
     
     @JsonIgnore
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<FeedImageComment> comments = new ArrayList<FeedImageComment>();
     
     @JsonIgnore
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<SaveImage> saveImages = new ArrayList<SaveImage>();
 
     public FUser(String id, String name, String introduce, String gender, Integer height, Integer weight, String profileImage) {

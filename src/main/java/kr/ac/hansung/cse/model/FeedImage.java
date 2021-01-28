@@ -36,79 +36,76 @@ import lombok.ToString;
 @NoArgsConstructor
 public class FeedImage implements Serializable {
 
-    /**
-     *
-     */
-    private static final long serialVersionUID = 4225217987814035781L;
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 4225217987814035781L;
 
-    @Id
-    @Column(name = "image_name")
-    private String imageName;
+	@Id
+	@Column(name = "image_name")
+	private String imageName;
 
-    @Column(name = "timeStamp")
-    private LocalDateTime timeStamp;
+	@Column(name = "timeStamp")
+	private LocalDateTime timeStamp;
 
-    @Column(name = "style")
-    private String style;
+	@Column(name = "style")
+	private String style;
 
-    @Column(name = "top")
-    private String top;
+	@Column(name = "top")
+	private String top;
 
-    @Column(name = "pants")
-    private String pants;
+	@Column(name = "pants")
+	private String pants;
 
-    @Column(name = "shoes")
-    private String shoes;
+	@Column(name = "shoes")
+	private String shoes;
 
-    @Column(name = "rank")
-    private int rank;
+	@Column(name = "rank")
+	private int rank;
 
-    @Column(name = "evaluate_now")
-    private boolean evaluateNow;
-    
-    @Column(name = "result_rating")
-    private float resultRating;
-    
-    @Column(name = "resultTimeStamp")
-    private LocalDateTime resultTimeStamp;
+	@Column(name = "evaluate_now")
+	private boolean evaluateNow;
 
-    @JsonIgnoreProperties({"image"})
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @OneToMany(mappedBy = "image", cascade = CascadeType.ALL)
-    private List<FeedImageEvaluation> evaluations = new ArrayList<FeedImageEvaluation>();
-    
-    @JsonIgnoreProperties({"image"})
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @OneToMany(mappedBy = "image", cascade = CascadeType.ALL)
-    private List<FeedImageComment> comments = new ArrayList<FeedImageComment>();
-    
-    @JsonIgnoreProperties({"image"})
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @OneToOne(mappedBy = "image", cascade = CascadeType.ALL)
-    private ManRankImage manRankImage;
-    
-    @JsonIgnoreProperties({"image"})
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @OneToOne(mappedBy = "image", cascade = CascadeType.ALL)
-    private WomanRankImage womanRankImage;
-        
-    @JsonIgnoreProperties({"images"})
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private FUser user;
+	@Column(name = "result_rating")
+	private float resultRating;
 
-    public FeedImage(String imageName, String style, String top, String pants, String shoes, int rank, boolean evaluateNow, float resultRating, FUser user) {
-        this.imageName = imageName;
-        this.style = style;
-        this.top = top;
-        this.pants = pants;
-        this.shoes = shoes;
-        this.rank = rank;
-        this.evaluateNow = evaluateNow;
-        this.resultRating = resultRating;
-        this.timeStamp = LocalDateTime.now();
-        this.resultTimeStamp = null;
-        this.user = user;      
-    }
+	@Column(name = "resultTimeStamp")
+	private LocalDateTime resultTimeStamp;
+
+	@JsonIgnoreProperties({ "image" })
+	@OneToMany(mappedBy = "image", cascade = CascadeType.ALL)
+	private List<FeedImageEvaluation> evaluations = new ArrayList<FeedImageEvaluation>();
+
+	@JsonIgnoreProperties({ "image" })
+	@OneToMany(mappedBy = "image", cascade = CascadeType.ALL)
+	private List<FeedImageComment> comments = new ArrayList<FeedImageComment>();
+
+	@JsonIgnoreProperties({ "image" })
+	@OneToOne(mappedBy = "image", cascade = CascadeType.ALL)
+	private ManRankImage manRankImage;
+
+	@JsonIgnoreProperties({ "image" })
+	@OneToOne(mappedBy = "image", cascade = CascadeType.ALL)
+	private WomanRankImage womanRankImage;
+
+	@JsonIgnoreProperties({ "images" })
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	private FUser user;
+
+	public FeedImage(String imageName, String style, String top, String pants, String shoes, int rank,
+			boolean evaluateNow, float resultRating, FUser user) {
+		this.imageName = imageName;
+		this.style = style;
+		this.top = top;
+		this.pants = pants;
+		this.shoes = shoes;
+		this.rank = rank;
+		this.evaluateNow = evaluateNow;
+		this.resultRating = resultRating;
+		this.timeStamp = LocalDateTime.now();
+		this.resultTimeStamp = null;
+		this.user = user;
+	}
 
 }
