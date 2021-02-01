@@ -1,6 +1,7 @@
 package kr.ac.hansung.cse.controller;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,10 +52,9 @@ public class FeedImageCommentController {
 	public ResponseEntity<List<FeedImageComment>> getImageComment(@PathVariable("imageName") String imageName) {
 		Optional<FeedImage> feedImageData = feedImageRepository.findById(imageName);
 		FeedImage image = feedImageData.get();
-		List<FeedImageComment> commentData = feedImageCommentRepository.findByImage(image);
-
-		if (commentData.isEmpty()) {
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		List<FeedImageComment> commentData = new ArrayList<>();
+		if(feedImageCommentRepository.findByImage(image).isPresent()) {
+			commentData = feedImageCommentRepository.findByImage(image).get();
 		}
 		return new ResponseEntity<>(commentData, HttpStatus.OK);
 	}
