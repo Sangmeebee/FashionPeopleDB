@@ -14,5 +14,16 @@ public class HomeController {
 		
 		return "index";
 	}	
+	
+	@GetMapping("/individual/information/policy")
+	public String getPolicy() {
+		
+		return "policy";
+	}	
 
+	@GetMapping("/termsOfUse")
+	public String getTermsOfUser() {
+		
+		return "termsOfUse";
+	}	
 }
