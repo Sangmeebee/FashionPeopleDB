@@ -71,18 +71,18 @@ public class FeedImageController {
 	public ResponseEntity<List<FeedImage>> getUserImages(@PathVariable("id") String id) {
 		Optional<FUser> userData = fUserrepository.findById(id);
 		FUser user = userData.get();
+		List<FeedImage> images = new ArrayList<>();
 		Optional<List<FeedImage>> _images = feedImageRepository.findByUser(user);
 		if (_images.isPresent()) {
-			List<FeedImage> images = _images.get();
+			images = _images.get();
 			images.sort(new Comparator<FeedImage>() {
 				@Override
 				public int compare(FeedImage o1, FeedImage o2) {
 					return o2.getTimeStamp().compareTo(o1.getTimeStamp());
 				}
 			});
-			return new ResponseEntity<>(images, HttpStatus.OK);
 		}
-		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		return new ResponseEntity<>(images, HttpStatus.OK);
 	}
 
 	@GetMapping("/imageName/{imageName}")
